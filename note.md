@@ -1,4 +1,4 @@
-##2019.12.02
+###2019.12.02
 
 1.`document.querySelector(someDom).style`获取到的是通过元素的style属性设置的样式，不包含样式表层叠样式<br/>
 `document.defaultView.getComputedStyle(someDom,null)`获取元素所有计算后的样式(第二个参数是伪元素字符串，不需要时传null)<br/>
