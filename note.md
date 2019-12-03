@@ -17,3 +17,8 @@
 3.`scrollHeight、scrollWidth`：在没有滚动条的情况下，元素内容的总高(宽)度
 
 `scrollTop、scrollLeft`：元素上（左）侧被隐藏的内容的高（宽）度
+
+## 2019.12.03
+1.`document.createNodeInerator()`和`document.createTreeWalker()`用于遍历dom结构
+
+2.`document.createRange()`创建dom范围，进行后续操作
