@@ -1,9 +1,6 @@
 ## 2019.12.02
 
-1.
-```
-document.querySelector(someDom).style
-```
+1.`document.querySelector(someDom).style`
 
 获取到的是通过元素的style属性设置的样式，不包含样式表层叠样式
 
