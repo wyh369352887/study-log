@@ -30,7 +30,7 @@
 
 3.`removeEventListener`的第二个参数不能是匿名函数
 
-4.封装兼容性高的事件添加、删除程序
+4.封装兼容性高的事件操作程序(没有考虑`this`的指向问题)
 
 ```
 var EventUtil = {
@@ -43,6 +43,26 @@ var EventUtil = {
             element["on" + type] = handler;
         }
     },
+    getEvent: function(event){
+            return event ? event : window.event;
+    },
+            getTarget: function(event){
+                return event.target || event.srcElement;
+    },
+            preventDefault: function(event){
+                if (event.preventDefault){
+                    event.preventDefault();
+                } else {
+                    event.returnValue = false;
+                }
+    },
+    stopPropagation: function(event){
+        if (event.stopPropagation){
+            event.stopPropagation();
+        } else {
+            event.cancelBubble = true;
+        }
+    ,}
     removeHandler: function(element, type, handler){
         if (element.removeEventListener){
             element.removeEventListener(type, handler, false);
@@ -53,3 +73,9 @@ var EventUtil = {
 } }
 };
 ```
+
+5.`event.currentTarget`是注册事件的元素
+
+`event.target`是事件发生的实际目标
+
+P362
