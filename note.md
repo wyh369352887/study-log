@@ -22,3 +22,34 @@
 1.`document.createNodeInerator()`和`document.createTreeWalker()`用于遍历dom结构
 
 2.`document.createRange()`创建dom范围，进行后续操作
+
+## 2019.12.06
+1.`attachEvent() detachEvent()`IE中的`addEventListener removeEventListener`其中`this`指向window
+
+2.`addEventListener`可以添加多个事件处理程序，按照添加的顺序执行,`attachEvent`也可以添加多个事件处理程序，按照相反的顺序执行
+
+3.`removeEventListener`的第二个参数不能是匿名函数
+
+4.封装兼容性高的事件添加、删除程序
+
+```
+var EventUtil = {
+    addHandler: function(element, type, handler){
+        if (element.addEventListener){
+            element.addEventListener(type, handler, false);
+        } else if (element.attachEvent){
+            element.attachEvent("on" + type, handler);
+        } else {
+            element["on" + type] = handler;
+        }
+    },
+    removeHandler: function(element, type, handler){
+        if (element.removeEventListener){
+            element.removeEventListener(type, handler, false);
+        } else if (element.detachEvent){
+            element.detachEvent("on" + type, handler);
+        } else {
+            element["on" + type] = null;
+} }
+};
+```
