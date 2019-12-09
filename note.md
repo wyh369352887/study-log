@@ -79,3 +79,10 @@ var EventUtil = {
 `event.target`是事件发生的实际目标
 
 P362
+
+## 2019.12.09
+1.可以通过`element.contextmenu`制作自定义的右键菜单
+
+2.`DomContentLoaded`事件在dom树解析完毕后触发，不考虑js、css、img等资源是否下载完毕，触发时间早于`window.onload`
+
+P402
