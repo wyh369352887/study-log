@@ -86,3 +86,8 @@ P362
 2.`DomContentLoaded`事件在dom树解析完毕后触发，不考虑js、css、img等资源是否下载完毕，触发时间早于`window.onload`
 
 P402
+
+## 2019.12.11
+1.使用`clipboardEvent`和`execCommand`来操作剪贴板内容
+
+P427
