@@ -102,22 +102,71 @@ P427
 4.可以使用`appendChild`方法将一个select中的option转移到另一个option中(appendChild方法如果传入一个已经存在的dom,将会先在父节点中将其删除)
 
 5.canvas API
-```
 绘制矩形
-fillRect()    //实心矩形
-strokeRect()  //描边矩形
-
+```
+fillRect(x坐标,y坐标,宽度,高度)    //实心矩形
+strokeRect(x坐标,y坐标,宽度,高度)  //描边矩形
+clearRect(x坐标,y坐标,宽度,高度)    //清除矩形区域
+```
 
 绘制路径
+```
 beginPath()   //开始绘制路径
-arc()   //以给定坐标为圆心绘制弧线
-arcTo() //从上一点开始绘制一条弧线到下一点
-bezierCurveTo() //从上一点开始绘制贝塞尔曲线
-lineTo()    //从上一点开始绘制直线
-moveTo()    //将绘图游标移动到给定坐标，不画线
-quadraticCurveTo()  //从上一点开始绘制二次曲线
-rect()  //从给定坐标开始绘制矩形路径，不同于fillRect()和strokeRect()绘制的独立形状
+arc(x,y,弧线半径,起始角度,结束角度,是否逆时针)   //以(x,y)为圆心绘制弧线
+arcTo(x1,y1,x2,y2,半径) //从上一点开始绘制一条弧线到(x2,y2),且经过(x1,y1)
+bezierCurveTo(c1x,c1y,c2x,c2y,x,y) //从上一点开始绘制贝塞尔曲线到(x2,y2),并且以(c1x,c1y)和(c2x,c2y)为控制点
+lineTo(x,y)    //从上一点开始绘制直线到(x,y)
+moveTo(x,y)    //将绘图游标移动到(x,y)，不画线
+quadraticCurveTo(cx,cy,x,y)  //从上一点开始绘制二次曲线到(x,y),且(cx,cy)为控制点
+rect(x,y,宽度,高度)  //从给定坐标开始绘制矩形路径，不同于fillRect()和strokeRect()绘制的独立形状
+```
 
 绘制文字
+```
+font()  //设置文字样式(字体,字号等)
+textAlign() //设置文字对齐方式
+testBaseline()  //设置文字基线
+fillText('文本内容',x,y)  //设置文本内容和位置,如果textAlign为`middle`,则(x,y)为文本块的中心点坐标;为`start`,则x坐标为文本块左端的位置;为`end`,x坐标为文本块右端的位置
+```
 
+上下文变换
+```
+rotate(角度)    //旋转
+scale(x轴倍率,y轴倍率)     //缩放
+translate(x,y)     //将原点移动到(x,y)
+```
+
+绘制图像
+```
+drawImage(图像,x坐标,y坐标,宽度,高度)     //可以多传入4个参数,只绘制图像中的某个区域(目标图像的x坐标,目标图像的y坐标,目标图像的宽度,目标图像的高度)
+```
+
+阴影
+```
+shadowColor     //阴影颜色
+shadowOffsetX   //阴影x轴偏移量
+shadowOffsetY   //阴影y轴偏移量
+shadowBlur      //阴影模糊程度(px)
+```
+
+渐变
+```
+通过`createLinearGradient`创建渐变实例
+var gradient = context.createLinearGradient(起点x坐标,起点y坐标,终点x坐标,终点y坐标);
+gradient.addColorStop(0~1的数字,色值)
+最后将渐变实例添加到画布
+context.fillStyle = gradient
+
+通过`createRadialGradient`创建放射渐变实例
+var gradient = context.createLinearGradient(起点圆心x坐标,起点圆心y坐标,起点圆半径,终点圆心x坐标,终点圆心y坐标,终点圆半径);
+var gradient = context.createLinearGradient(起点x坐标,起点y坐标,终点x坐标,终点y坐标);
+gradient.addColorStop(0~1的数字,色值)
+最后将渐变实例添加到画布
+context.fillStyle = gradient
+```
+
+模式(重复的图像,可以用来填充或描边图形)
+```
+var pattern = content.createPattern(HTML<img>元素、<video>元素或另一个<canvas>元素,重复规则)
+context.fillStyle = pattern
 ```
