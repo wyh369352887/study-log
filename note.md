@@ -170,3 +170,31 @@ context.fillStyle = gradient
 var pattern = content.createPattern(HTML<img>元素、<video>元素或另一个<canvas>元素,重复规则)
 context.fillStyle = pattern
 ```
+
+使用图像数据
+```
+getImageData(x坐标,y坐标,宽度,高度)     //获取(x,y)为左顶点的矩形的图像数据
+
+返回的是ImageData的实例,每个ImageData都有三个属性:width,height,data
+
+data中是一个数组,保存着每一个像素点的红、绿、蓝、透明度的值
+```
+
+全局上下文透明度:`globalAlpha(0~1)`
+
+后绘制的图形与先绘制的图形结合的行为
+```
+source-over(默认值):后绘制的图形位于先绘制的图形上方
+source-in:后绘制的图形与先绘制的图形重叠的部分可见，两者其他部分完全透明
+source-out:后绘制的图形与先绘制的图形不重叠的部分可见，先绘制的图形完全透明
+source-atop:后绘制的图形与先绘制的图形重叠的部分可见，先绘制图形不受影响
+destination-over:后绘制的图形位于先绘制的图形下方，只有之前透明像素下的部分才可见
+destination-in:后绘制的图形位于先绘制的图形下方，两者不重叠的部分完全透明
+destination-out:后绘制的图形擦除与先绘制的图形重叠的部分
+destination-atop:后绘制的图形位于先绘制的图形下方，在两者不重叠的地方，先绘制的图形会变透明
+lighter:后绘制的图形与先绘制的图形重叠部分的值相加，使该部分变亮
+copy:后绘制的图形完全替代与之重叠的先绘制图形
+xor:后绘制的图形与先绘制的图形重叠的部分执行“异或”操作
+```
+
+P463
