@@ -91,3 +91,33 @@ P402
 1.使用`clipboardEvent`和`execCommand`来操作剪贴板内容
 
 P427
+
+## 2019.12.12
+1.HTML5表单元素的`required`属性，只有在进行表单的submit时才会发生作用
+
+2.HTML5中Input的几种type属性`email`、`url`等，校验存在问题，建议使用正则手动校验
+
+3.可以通过将`select[optionIndex] = null`的方式将下拉菜单的选项清除
+
+4.可以使用`appendChild`方法将一个select中的option转移到另一个option中(appendChild方法如果传入一个已经存在的dom,将会先在父节点中将其删除)
+
+5.canvas API
+```
+绘制矩形
+fillRect()    //实心矩形
+strokeRect()  //描边矩形
+
+
+绘制路径
+beginPath()   //开始绘制路径
+arc()   //以给定坐标为圆心绘制弧线
+arcTo() //从上一点开始绘制一条弧线到下一点
+bezierCurveTo() //从上一点开始绘制贝塞尔曲线
+lineTo()    //从上一点开始绘制直线
+moveTo()    //将绘图游标移动到给定坐标，不画线
+quadraticCurveTo()  //从上一点开始绘制二次曲线
+rect()  //从给定坐标开始绘制矩形路径，不同于fillRect()和strokeRect()绘制的独立形状
+
+绘制文字
+
+```
