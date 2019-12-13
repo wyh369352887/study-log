@@ -210,7 +210,8 @@ xor:后绘制的图形与先绘制的图形重叠的部分执行“异或”操�
 P463
 
 ## 2019.12.13
-1.WebGL
+### WebGL
+
 `ArrayBuffer`类型化数组,只表示内存中的一块地方,只能用它分配一定数量的字节
 
 ```
@@ -231,7 +232,14 @@ var bytes = buffer.byteLength;
 
 读取和写入DataView的时候要根据实际操作的数据类型,选择相应的`getter`和`setter`方法
 
-|数据类型|getter|setter|
+数据类型|getter|setter
 ---|:--:|---:
 有符号8位整数|getInt8(byteOffset)|setInt8(byteOffset, value)
 无符号8位整数|getUint8(byteOffset)|setUint8(byteOffset, value)
+有符号16位整数|getInt16(byteOffset,littleEndian)|setInt16(byteOffset,value,littleEndian)
+无符号16位整数|getUint16(byteOffset,littleEndian)|setUint16(byteOffset,value,
+littleEndian)
+有符号32位整数|getInt32(byteOffset,littleEndian)|setInt32(byteOffset,value,littleEndian)
+无符号32位整数|getUint32(byteOffset,littleEndian)|setUint32(byteOffset,value,littleEndian)
+32位浮点数|getFloat32(byteOffset,littleEndian)|setFloat32(byteOffset,value,littleEndian)
+64位浮点数|getFloat64(byteOffset,littleEndian)|setFloat64(byteOffset,value,littleEndian)
