@@ -237,8 +237,7 @@ var bytes = buffer.byteLength;
 有符号8位整数|getInt8(byteOffset)|setInt8(byteOffset, value)
 无符号8位整数|getUint8(byteOffset)|setUint8(byteOffset, value)
 有符号16位整数|getInt16(byteOffset,littleEndian)|setInt16(byteOffset,value,littleEndian)
-无符号16位整数|getUint16(byteOffset,littleEndian)|setUint16(byteOffset,value,
-littleEndian)
+无符号16位整数|getUint16(byteOffset,littleEndian)|setUint16(byteOffset,value,littleEndian)
 有符号32位整数|getInt32(byteOffset,littleEndian)|setInt32(byteOffset,value,littleEndian)
 无符号32位整数|getUint32(byteOffset,littleEndian)|setUint32(byteOffset,value,littleEndian)
 32位浮点数|getFloat32(byteOffset,littleEndian)|setFloat32(byteOffset,value,littleEndian)
