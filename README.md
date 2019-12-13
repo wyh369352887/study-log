@@ -242,3 +242,67 @@ var bytes = buffer.byteLength;
 无符号32位整数|getUint32(byteOffset,littleEndian)|setUint32(byteOffset,value,littleEndian)
 32位浮点数|getFloat32(byteOffset,littleEndian)|setFloat32(byteOffset,value,littleEndian)
 64位浮点数|getFloat64(byteOffset,littleEndian)|setFloat64(byteOffset,value,littleEndian)
+
+`byteOffset`为字节偏移量,标识存储的开始位置,`littleEndian`是一个布尔值,表示读写数值时是否采用小端字节序(即将数据的最低有效位保存在低内存地址中)，而不是大端字节 序(即将数据的最低有效位保存在高内存地址中)。使用DataView得明确知道数据需要多少字节，并选择正确的读写方法,比如:
+
+```
+var buffer = new ArrayBuffer(20),
+    view = new DataView(buffer),
+    value;
+view.setUint16(0, 25);
+view.setUint16(2, 50); //不能从字节 1 开始，因为 16 位整数要用 2B value = view.getUint16(0);
+```
+
+```
+var buffer = new ArrayBuffer(20),
+    view = new DataView(buffer),
+    value;
+
+view.setUint16(0,25);
+value = view.getUnit8(0);
+
+alert(value); //0,因为数值25以16位长度被写入,前八位都是0
+```
+
+类型化视图
+
+```
+Int8Array    //表示 8 位二补整数。
+Uint8Array    //表示 8 位无符号整数。
+Int16Array    //表示 16 位二补整数。
+Uint16Array    //表示 16 位无符号整数。
+Int32Array    //表示 32 位二补整数。
+Uint32Array    //表示 32 位无符号整数。
+Float32Array    //表示 32 位 IEEE 浮点值。
+Float64Array    //表示 64 位 IEEE 浮点值。
+```
+
+因为都继承自`DataView`,所以可以使用相同的构造函数参数进行实例化,第一个参数是要 使用 ArrayBuffer 对象，第二个参数是作为起点的字节偏移量(默认为 0)，第三个参数是要包含的字节数,只有第一个参数是必须的
+
+```
+//创建一个新数组，使用整个缓冲器
+var int8s = new Int8Array(buffer);
+//只使用从字节 9 开始的缓冲器
+var int16s = new Int16Array(buffer, 9);
+//只使用从字节 9 到字节 18 的缓冲器
+var uint16s = new Uint16Array(buffer, 9, 10);
+```
+
+能够指定缓冲器中的可用字节段,意味着能在一个缓冲器中存储不同类型的数值
+
+```
+//使用缓冲器的一部分保存 8 位整数，另一部分保存 16 位整数 var int8s = new Int8Array(buffer, 0,10);
+var uint16s = new Uint16Array(buffer, 11, 10);
+```
+
+每个视图构造函数都有一个名为BYTES_PER_ELEMENT的属性,表示类型化数组的每个元素需要多少字节,可以利用这个属性进行初始化
+
+```
+//需要 10 个元素空间
+var int8s = new Int8Array(buffer, 0, 10 * Int8Array.BYTES_PER_ELEMENT);
+//需要 5 个元素空间
+var uint16s = new Uint16Array(buffer, int8s.byteOffset + int8s.byteLength,5 * Uint16Array.BYTES_PER_ELEMENT);
+//基于一个缓冲器创建了两个视图,前10B用于存放8位整数,后边的用于存放16位整数
+```
+
+如果为相应元素指定的字节数放不下相应的值,则实际保存的值是最大可能值的模
