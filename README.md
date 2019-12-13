@@ -306,3 +306,5 @@ var uint16s = new Uint16Array(buffer, int8s.byteOffset + int8s.byteLength,5 * Ui
 ```
 
 如果为相应元素指定的字节数放不下相应的值,则实际保存的值是最大可能值的模
+
+P468
