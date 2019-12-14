@@ -308,3 +308,46 @@ var uint16s = new Uint16Array(buffer, int8s.byteOffset + int8s.byteLength,5 * Ui
 如果为相应元素指定的字节数放不下相应的值,则实际保存的值是最大可能值的模
 
 P468
+
+## 2019.12.14
+1.WebGL上下文
+
+```
+var canvas = document.getElementById('canvas');
+var gl = canvas.getContext('experimental-webgl);
+```
+
+2.准备绘图阶段，一般以某种实色清除<canvas>，为绘图做准备
+```
+gl.clearColor(0,0,0,1);
+gl.clear(gl.COLOR_BUFFER_BIT);
+```
+
+3.视口与坐标
+
+视口坐标与网页坐标不同，坐标原点(0,0)位于<canvas>元素的左下角，通过viewport(x轴坐标,y轴坐标,宽度,高度)设置视口.
+
+`gl.viewport(0,0,drawing.width,drawing.height)  //视口使用整个<canvas>`
+
+视口内部坐标与定义视口的坐标系也不同，坐标原点(0,0)位于视口的中心，视口右上角坐标为(1,1)，视口左下角坐标为(-1,-1);
+
+4.缓冲区
+
+使用`gl.createBuffer()`创建缓冲区,使用`gl.bindBuffer()`绑定到webGL上下文，这两部做完以后，就可以用数据填充缓冲区了
+
+在重载页面之前，缓冲区始终保存在内存中，需要手动调用`gl.deleteBuffer(buffer)`来释放缓存
+
+5.错误
+
+webGL不会主动抛出错误，需要使用`gl.getError()`判断是否有错误，返回值可能为：
+
+```
+gl.NO_ERROR //上一次操作没有错误
+gl.INVALID_ENUM  //应该给方法传入webGL常量，参数错误
+gl.INVALID_VALUE  //在需要无符号数的地方传入了数值
+gl.INVALID_OPERATION  //在当前状态下不能完成操作
+gl.OUT_OF_MEMORY  //没有足够的内存完成操作
+gl.CONTEXT_LOST_WEBGL  //由于外部事件干扰，丢失了当前的webGL上下文
+```
+
+p480
