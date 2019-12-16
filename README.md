@@ -351,3 +351,62 @@ gl.CONTEXT_LOST_WEBGL  //由于外部事件干扰，丢失了当前的webGL上�
 ```
 
 p480
+
+## 2019.12.16
+
+1.跨文档消息传递`postMessage(msg,origin)`,msg:消息字符串,origin:接受消息方来自哪个域名
+
+`postMessage()`会触发接收消息方window对象的onmessage事件，`onmessage(msg,origin,source)`,msg:消息字符串,origin:发送消息方所在域名,source:发送消息方window的代理对象(只是一个代理，仅仅使用source调用postMessage()进行回执即可)
+
+2.拖动事件的触发顺序:
+
+dragstart => drag => dragend
+
+当某个元素被拖动到一个有效的放置目标上时,会依次触发:
+
+dragenter(进入有效区) => dragover(在有效区内移动) => dragleave(离开有效区)或drop(被放置在有效区内)
+
+3.自定义放置目标:
+
+```
+dom.addEventListener('dragenter',funciton(e){
+    e.preventDefault();
+},false);
+
+dom.addEventListener('dragover',funciton(e){
+    e.preventDefault();
+},false);
+```
+
+4.`dataTransfer`对象的传递数据作用
+
+```
+//传递text数据
+event.dataTransfer.setData('text','some text');
+var text = event.dataTransfer.getData('text');
+
+//传递url数据
+event.dataTransfer.setData('URL','http://www.url.com');
+var url = event.dataTransfer.getData('URL');
+```
+
+5.`dataTransfer`对象可以确定拖动元素和放置元素可以接收什么操作(`dragEffect和effectAllowed`)
+
+```
+在ondragenter事件中为放置元素确定dropEffect属性,可能的值如下:
+none           //不能把拖动元素放在这里
+move           //应该把拖动元素移动到放置目标
+copy           //应该把拖动元素复制到放置目标
+link           //放置目标会打开拖动的元素(有URL)
+
+在ondragstart事件中为拖动元素确定effectAllowed属性,可能的值如下:
+uninitialized  //没有设置任何放置行为
+none           //被拖动的元素不能有任何行为
+copy           //只允许值为copy的dropEffect
+link           //只允许值为link的dropEffect
+move           //只允许值为move的dropEffect
+copyLink       //允许copy + link
+copyMove       //允许copy + move
+linkMove       //允许link + move
+all            //允许所有
+```
