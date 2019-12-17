@@ -410,3 +410,48 @@ copyMove       //允许copy + move
 linkMove       //允许link + move
 all            //允许所有
 ```
+
+## 2019.12.17
+
+1.使元素可拖放,需给元素添加`draggable = "true"`属性
+
+`<div draggable="true"></div>`
+
+2.检测浏览器是否支持某种格式和编解码器
+
+```
+var audio = document.getElementById('audio');
+
+if(audio.canPlayType("audio/mpeg")){
+    //canPlayType()返回值 //probably、maybe或空字符串
+}
+```
+
+3.audio元素没有必要一定插入文档中才能播放,通过`new Audio()`生成一个audio对象并为其src属性赋值,在下载完成后调用play()方法即可播放
+
+4.历史状态管理
+
+```
+history.pushState(状态信息(对象),新状态的标题,可选的相对URL) //添加页面栈
+
+```
+
+点击浏览器的回退按钮会触发window对象的popstate事件,该事件有一个state属性,包含着pushState方法第一个参数中的内容
+
+```
+history.replaceState(状态信息(对象),新状态的标题)  //重写当前页面栈层
+```
+
+5.try-catch语句
+
+```
+try{
+    //可能会发生错误的语句
+}catch(e){
+    //错误发生时的操作
+}finally{
+    //finall语句是可选的,一旦有finally语句,无论程序是否错误都会执行其中的代码
+}
+```
+
+P505
