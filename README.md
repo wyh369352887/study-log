@@ -566,3 +566,5 @@ JSON.stringify(obj) //"Bob"
     d. 如果提供了第三个参数,则进一步进行序列化
 
 7.`JSON.parse()`也可以接收2个参数,第一个参数是JSON字符串,第二个参数与与`JSON.stringify()`的第二个参数类似,但不能为数组
+
+P570
