@@ -484,3 +484,85 @@ P505
 + 执行相同操作可以消除错误
 
 P520
+
+## 2019.12.19
+
+1.JSON是一种数据格式，不是一种语言
+
+2.JSON的属性必须用双引号包裹，单引号会导致语法错误
+
+3.JSON无需分号结尾
+
+4.`JSON.stringify()`接收3个参数,第一个参数是一个js对象,
+
+第二个参数是一个数组时:
+
+```
+var obj = {
+    name:'Bob',
+    age:25,
+    sex:'male'
+}
+
+JSON.stringify(obj,['name','age']);
+
+//"{"name":"Bob","age":25}"  只会返回数组中包含的属性
+```
+
+第二个参数是一个函数时:
+
+```
+var obj = {
+    name:'Bob',
+    age:25,
+    sex:'male',
+    city:'ShangHai'
+}
+
+JSON.stringify(obj,function(key,value){
+    switch(key){
+        case 'name':
+            return 'Hi, ' + value;
+        case 'age':
+            return undefined;
+        case 'sex':
+            return 'unknown';
+        default:
+            return value;
+    }
+})
+
+//"{"name":"Hi, Bob","sex":"unknown","city":"ShangHai"}"
+
+//作为第二个参数的函数接收2个参数,第一个是键名,第二个是键值
+//可根据键名对键值进行操作
+//当return undefined时,删除此属性
+//同时一定要添加default,保持未操作的属性不被改变
+```
+
+第三个参数用于控制结果中的缩进和空白符:为数值时,每一行缩进数值位的空格(最大为10),为字符串时,用字符串代替空格进行缩进
+
+5.可以为任何对象添加toJSON()方法,修改默认的stringify()行为
+
+```
+var obj = {
+    name:'Bob',
+    age:25,
+    sex:'male',
+    city:'ShangHai',
+	toJSON:function(){
+        return this.name
+    }
+}
+
+JSON.stringify(obj) //"Bob"
+```
+
+6.将一个对象传入`JSON.stringify()`方法,序列化该对象的顺序如下:
+
+1. 如果对象存在`toJSON()`方法且能通过它取得有效值,则调用该方法,否则返回对象本身
+2. 如果`JSON.stringify()`提供了第二个参数,则应用该过滤器,传入过滤器的是(1)的返回值
+3. 对(2)的返回值进行相应的序列化
+4. 如果提供了第三个参数,则进一步进行序列化
+
+7.`JSON.parse()`也可以接收2个参数,第一个参数是JSON字符串,第二个参数与与`JSON.stringify()`的第二个参数类似,但不能为数组
