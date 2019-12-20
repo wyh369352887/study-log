@@ -568,3 +568,102 @@ JSON.stringify(obj) //"Bob"
 7.`JSON.parse()`也可以接收2个参数,第一个参数是JSON字符串,第二个参数与与`JSON.stringify()`的第二个参数类似,但不能为数组
 
 P570
+
+## 2019.12.20
+
+1.xhr用法
+
+```
+var xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function(){
+    if(xhr.readyStatus == 4){
+        if((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+            alert(xhr.responseText);
+        }else{
+            alert("request was unsuccessful: " + xhr.status);
+        }
+    }
+}
+xhr.open('get','example.php',true);  //第一个参数是请求方法,第二个参数是请求目标,第三个参数表示是否异步
+xhr.send(null); //send()方法接收一个参数,是请求主体发送的数据
+                //在接收到相应之前还可以调用xhr.abort()来取消异步请求
+```
+
+2.请求头和响应头
+
+使用`xhr.setRequestHeader('自定义请求头','值')`可以设置自定义请求头,但必须在xhr.open()方法之后,同时在xhr.send()方法之前
+
+使用`xhr.getResponseHeader(‘头部名称’)`可以获得指定的响应头,使用`xhr.getAllResponseHeader()`可以获得一个包含所有头部信息的长字符串
+
+3.判断是否为数组、函数、正则表达式、原生JSON对象
+
+`Object.prototype.toString.call(value) == "[object Function]"`
+`Object.prototype.toString.call(value) == "[object Array]"`
+`Object.prototype.toString.call(value) == "[object RegExp]"`
+`window.JSON && Object.prototype.toString.call(value) == "[object JSON]"`
+
+4.作用域安全的构造函数
+
+```
+function Person(name,age){
+    if(this instanceof Person){
+        this.name = name;
+        this.age = age;
+    }else{
+        return new Person(name,age);
+    }
+}
+var Ann = new Person('Ann',20);
+var Bob = Person('Bob',22);
+
+Ann.name //'Ann'
+Bob.name //'Bob'
+
+//在没有使用new关键字调用构造函数时,构造函数内的this指向Window,会导致错误的属性赋值
+```
+
+5.惰性载入函数:对环境确定即唯一确定的属性或对象等进行检查的函数,实际上只有第一次的执行是有意义的
+
+第一种思路:
+
+```
+function foo(){
+    if(someValue == 'a'){
+        foo = function(){
+            //do something a
+        }
+    }else if(someValue == 'b'){
+        foo = function(){
+            //do something b
+        }
+    }else if(someValue == 'c'){
+        foo = funtion(){
+            //do something c
+        }
+    }
+    ........
+    return foo();
+}
+```
+
+第二种思路:
+
+```
+var foo = (function(){
+    if(someValue == 'a'){
+        return function(){
+            //do something a
+        }
+    }else if(someValue == 'b'){
+        return function(){
+            //do something b
+        }
+    }else if(someValue == 'c'){
+        return function(){
+            //do something c
+        }
+    }
+    ...
+})();
+```
+P606
