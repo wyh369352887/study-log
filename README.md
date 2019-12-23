@@ -667,3 +667,50 @@ var foo = (function(){
 })();
 ```
 P606
+
+## 2019.12.23
+
+1.对象防篡改
+`Object.preventExtensions()`可以使对象不能再被扩展(不可逆转)
+
+`Object.isExtensible()`检测对象是否可以扩展
+
+`Object.seal()`可以将对象密封：不能增加和删除属性，可以修改已有属性
+
+`Object.isSeal()`检测对象是否密封,`Object.isExtensible()`检测密封对象同样会返回true
+
+`Object.freeze()`是最严格的对象防篡改级别，不可扩展、不可删除、不可修改对象的属性。(如果定义了属性的[[set]]函数，属性仍然可写);
+
+`Object.isFrozen()`检测对象是否冻结，同样，冻结的对象`Object.isExtensible()`和`Object.isSeal()`都返回true
+
+2.定时器
+
+`setTimeout`和`setInterval`并不是表示在指定时间后执行（重复执行）事件，而是在指定事件后将事件添加到线程队列中。
+
+重复定时器:使用`setTimeout`来实现`setInterval`的功能，同时避免了因为定时器代码的执行时间大于定时器的间隔带来的间隔丢失问题
+
+```
+var interval = 500;
+setTimeout(funciton(){
+    //do some thing
+    setTimeout(arguments.callee,interval);
+},interval);
+```
+
+3.分割任务:例如循环处理一个数组中的内容，如果不是必须同步完成处理或者不是必须按照顺序完成处理，可以对任务进行分割
+
+```
+var array = [1,2,3,4,5,6,7,8,9];
+
+function chunk(array,progress,context){   //array:待处理数组   progress:处理函数   context:处理函数的运行环境
+    setTimeout(function(){
+        var item = array.shift();       //取出数组中的第一个元素
+        progress(item,context);
+
+        if(array.length > 0){           //如果数组中还有元素，则创建下一个定时器
+            setTimeout(argrments.callee,100);
+        }
+    },100);
+}
+```
+P614
