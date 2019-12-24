@@ -714,3 +714,81 @@ function chunk(array,progress,context){   //array:待处理数组   progress:处
 }
 ```
 P614
+
+## 2019.12.24
+
+1.函数节流:确保函数在请求停止了一段时间后才执行,避免过多的触发导致程序崩溃
+
+```
+var processor = {
+    timeoutId:null,
+    //实际进行处理的方法
+    performProcessing:function(){
+        //do something here
+    },
+    process:function(){
+        clearTimeout(this.timeoutId);
+
+        var that = this;
+        this.timeoutId = setTimeout(function(){
+            that.performProcessing();
+        },100);
+    }
+}
+
+processor.process();
+
+//100ms内,processor.performProcessing()只执行一次
+```
+
+2.自定义事件:应用于非DOM元素
+
+```
+function EventTarget(){
+    this.handlers = {};
+    //用于储存事件处理程序
+}
+
+EventTarget.prototype = {
+    constructor:EventTarget,
+    addHandler:function(type,handler){
+        if(typeof this.handlers[type] == 'undefined'){
+            this.handlers[type] = [];
+            //如果事件处理程序中没有针对该事件的数组,则创建一个
+        }
+
+        this.handlers[type].push(handler);
+        //将事件push到该事件的处理程序数组末端
+    },
+
+    fire:function(event){
+        //触发事件
+        if(!event.target){
+            event.target = this;
+            //event事件的属性需要手动添加
+        }
+        if(this.handlers[event.type] instanceof Array){
+            var handlers = this.handlers[event.type];
+            for(var i = 0,len = handlers.length; i < len; i++){
+                handlers[i](event);
+            }
+            //如果有针对该事件的处理程序,则依次调用
+        }
+    },
+
+    removeHandler(type,handler){
+        if(this.handlers[type] instanceof Array){
+            var handlers = this.handlers[type];
+            for(var i = 0,len = handlers.length; i < len; i++){
+                if(handlers[i] === handler){
+                    break;
+                }
+            }
+            //查找针对该事件的处理程序中是否有指定名称的方法,如果找到则跳出循环
+            handlers.splice(i, 1);
+            //如果找到了对应的方法,删除。如果没有找到,不删除任何东西
+        }
+    }
+}
+```
+P617
