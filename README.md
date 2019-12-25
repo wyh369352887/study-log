@@ -792,3 +792,17 @@ EventTarget.prototype = {
 }
 ```
 P617
+
+## 2019.12.25
+
+1.`navigator.onLine`返回设备是否联网
+
+2.window对象还有`online`和`offline`两个事件,在设备从离线转为在线和在线转为离线时触发
+
+3.cookie大小限制为4kb(4096B±1B),作用于一个域名下的所有cookie,而非每个cookie单独限制
+
+4.cookie格式:name = value
+
+  子cookie格式: name = name1 = value1 & name2 = value2 & name3 = value3 ...
+
+  P637
