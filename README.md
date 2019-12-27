@@ -806,3 +806,68 @@ P617
   子cookie格式: name = name1 = value1 & name2 = value2 & name3 = value3 ...
 
   P637
+
+## 2019.12.27
+
+1.`document.visibilityState`表示页面的可见状态
+
+2.document的`visibilityChange`事件在页面由可见 => 不可见 或由 不可见 => 可见时触发
+
+3.`navagator.geolocation.getCurrentPosition(successCallback,errorCallback,option)`获取地理位置API
+
+`successCallback`接受一个对象参数,其中可能包括:
+
+```
+latitude:十进制纬度
+longitude:十进制经度
+accuracy:经纬度坐标的精确度,以米为单位
+altitude:海拔,米为单位,没有则为null
+altitudeAccuracy:海拔经度,越大越不准确
+heading:指南针的方向,0表示正北,值为NaN表示没有检测到数据
+speed:速度,m/s,如果没有则为null
+```
+
+`errorCallback`也接受一个对象参数,其中包括两个属性:`message`:出错的为本信息,`code`:错误类型(1:用户拒绝共享,2:位置无效,3:超时);
+
+`option`是一个配置对象,其中包括3个属性:
+
+```
+enableHighAccuracy:Boolean,是否尽可能使用准备的位置信息
+timeout:超时时间
+maximumAge:表示上一次取得的坐标信息的有效时间，以毫 秒表示，如果时间到则重新取得新坐标信息
+```
+
+4.`navigator.geolocation.watchPosition(successCallback,errorCallback,option)`跟踪用户的地理位置,参数用法同上
+
+5.FileReader
+
+FileReader是一种异步文件读取机制,可以想象成XMLHttpRequest,提供了如下方法:
+
+```
+readAsText(file,encoding):以纯文本形式读取文件，将读取到的文本保存在 result 属 性中。第二个参数用于指定编码类型，是可选的
+readAsDataURL(file):读取文件并将文件以数据 URI 的形式保存在 result 属性中
+readAsBinaryString(file):读取文件并将一个字符串保存在result属性中，字符串中的
+每个字符表示一字节
+readAsArrayBuffer(file):读取文件并将一个包含文件内容的 ArrayBuffer 保存在
+result 属性中
+```
+
+同时提供了如下事件:
+
+```
+progress:每50ms触发一次,表示是否又读取了新数据
+error:发生错误(错误码:1 表示未找到文件,2表示安全性错误,3表示读取中断,4表示文件不可读,5表示编码错误)
+load:读取完成
+loadend:读取结束,无论成功还是失败
+```
+
+6.读取部分内容:File对象提供了一个slice(startByte,length)方法,第一个参数表示开始的字节数,第二个参数表示要读取的字节数
+
+7.对象URL:又叫blob URL,指的是引用保存在File或Blob中数据的URL,可以不用将文件内容读取到js中直接使用
+
+```
+创建blob URL:window.URL.createObjectURL(File或Bolb对象)
+释放:window.URL.revokeObjectURL(URL对象)
+```
+
+P696
