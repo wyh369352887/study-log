@@ -985,3 +985,38 @@ enum Color {Red = 1,Blue,Green};
 enum Color {Red = 1,Blue = 2,Green = 4};
 ```
 
+使用枚举类型的一个方便之处是由枚举的值得到他的名字:
+
+```
+enum Color { Red = 1, Blue, Green};
+let num:string = Color[2];
+//'Blue'
+//
+```
+
+3.Any:Any类型用于在编译时还不确定类型的变量
+
+```
+let noSure:any = 4;
+noSure = "some string"; //ok
+noSure = false; //ok
+```
+
+4.void:void类型与Any相反,表示没有任何类型,当一个函数没有返回值时,通常会见到其返回值类型是void
+
+```
+function foo(): void{
+    //do something without return
+}
+```
+
+5.null和undefined:在默认情况下null和undefined是所有类型的子类型,即可以把null和undefined赋值给其他的类型,但是在开启了`--stricNullChecks`标记后,只能将他们赋值给自身
+
+```
+let n:null = null;
+let u:undefined = undefined;
+```
+
+6.Never:never类型表示的是永不存在的值的类型,never类型可以被赋值给任何类型,但是任何类型都不能赋值给never类型(除了never本身)
+
+7.Object:object类型表示非原始类型,也就是除number,string,boolean,symbol,null,undefined之外的类型
