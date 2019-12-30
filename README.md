@@ -871,3 +871,90 @@ loadend:读取结束,无论成功还是失败
 ```
 
 P696
+
+## 2019.12.30
+
+1.`window.performence`对象记录了页面加载过程中的各种时间
+
+2.Web Workers:浏览器使用线程、后台进程、其他处理器运行一些比较消耗性能的js,从而避免影响用户体验
+
+```
+var worker = new Worker("file.js");  //传入要执行的Js文件名
+
+work.postMessage("start!")  //页面与worker中的代码通信,传递的数据可以是任意能够被序列化的值
+
+//注意,只有当worker接受到消息才会实际开始执行代码
+```
+
+worker的onmessage事件和onerror事件:
+
+```
+//接收worker返回的信息
+worker.onmessage = function(event){
+    var data = event.data;
+
+    //对data进行处理
+}
+
+//接受worker抛出的错误
+worker.onerror = function(event){
+    var filename = event.filename;  //出错的文件名
+    var lineno = event.lineno //代码行数
+    var message = event.message //详细错误信息
+}
+```
+
+停止worker工作:`worker.terminate()`;
+
+worker内部接收页面传来的数据:
+
+```
+//worker内部的全局对象是worker本身,即this、self指向worker
+
+self.onmessage = function(event){
+    var data = event.data;
+
+    //处理data
+}
+```
+
+worker内部终止任务:`self.close()`;
+
+3.剩余参数和分布参数
+
+```
+function foo(num1,num2,...nums){
+    //do some thing
+}
+//表示函数foo接收至少两个参数,当传入参数大于2时,其他的参数以数组的形式保存在nums变量中
+
+foo(...[1,2,3,4,5]);
+//将一个数组作为参数传递给函数foo,数组中的元素与已表明的函数参数一一对应,超出的部分以数组的形式保存在变量nums中
+
+//剩余参数在声明函数的时候使用,分布参数在调用函数的时候使用
+```
+
+4.结构赋值:允许字面量出现在等号左边
+
+```
+//可以用来交换两个变量
+
+var value1 = 5;
+var value2 = 10;
+[value1,value2] = [value2,value1];
+//value1 = 10,value2 = 5;
+```
+
+```
+var person = {
+    name:'wang',
+    age:18
+}
+var {name:myName,age:myAge} = person;
+
+//name => wang
+//age => 18
+//实际上相当于定义了myName和myAge两个变量,并取得了person对象中对应的值
+```
+
+《JavaScript高级程序设计(第三版)》结束
