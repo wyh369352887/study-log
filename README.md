@@ -1020,3 +1020,14 @@ let u:undefined = undefined;
 6.Never:never类型表示的是永不存在的值的类型,never类型可以被赋值给任何类型,但是任何类型都不能赋值给never类型(除了never本身)
 
 7.Object:object类型表示非原始类型,也就是除number,string,boolean,symbol,null,undefined之外的类型
+
+8.类型断言:跳过了编译器的语法检查
+
+```
+//两种语法
+let someValue:any = 'this is a string';
+let strLength:number = (<string>someValue).length;
+
+let someValue:any = 'this is a string';
+let strLength:number = (someValue as string).length;
+```
