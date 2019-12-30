@@ -958,3 +958,30 @@ var {name:myName,age:myAge} = person;
 ```
 
 《JavaScript高级程序设计(第三版)》结束
+
+### TypeScript
+
+1.元组:元组类型允许表示一个已知元素数量和类型的数组:
+
+```
+let x: [string, number];
+x = ['hello',888];
+```
+
+2.枚举:枚举类型是对JavaScript标准数据类型的一个补充,使用枚举类型可以为一组数值赋予友好的名字
+
+```
+enum Color {Red,Blue,Green};
+let c:Color = Color.Green;
+```
+
+默认情况下,从0开始为元素编号,也可以手动为元素编号:
+
+```
+//从1开始编号
+enum Color {Red = 1,Blue,Green};
+
+//全部手动编号
+enum Color {Red = 1,Blue = 2,Green = 4};
+```
+
