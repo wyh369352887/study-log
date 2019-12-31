@@ -1031,3 +1031,98 @@ let strLength:number = (<string>someValue).length;
 let someValue:any = 'this is a string';
 let strLength:number = (someValue as string).length;
 ```
+
+## 2019.12.31
+
+1.
+### 接口:
+
+```
+//定义接口,描述要求
+interface LabelledValue{
+    label:string
+}
+
+//使用接口检查参数
+function foo(labelledObj:LabelledValue){
+    console.log(laballedObj.label);
+}
+
+let myObj = {size:10,label:'some string'};
+
+foo(myObj);
+
+//*并不会检查属性的顺序
+```
+
+##### 可选属性:属性名后 + ?
+
+```
+interface SquareConfig {
+  color?: string;
+  width?: number;
+}
+
+function createSquare(config: SquareConfig): {color: string; area: number} {
+  let newSquare = {color: "white", area: 100};
+  if (config.color) {
+    newSquare.color = config.color;
+  }
+  if (config.width) {
+    newSquare.area = config.width * config.width;
+  }
+  return newSquare;
+}
+
+let mySquare = createSquare({color: "black"});//参数中没有"width"属性也可以通过编译
+```
+
+##### 只读属性:属性名前 + readonly
+
+```
+interface Point {
+    readonly x: number;
+    readonly y: number;
+}
+
+let p1: Point = { x: 10, y: 20 };
+//使用Point接口初始化一个变量
+
+p1.x = 5; 
+// error, x为只读属性
+```
+
+```
+//ts中具有ReadonlyArray类型,与普通的Array类似,只是把所有可变方法都去掉了,所以是只读数组
+let a: number[] = [1, 2, 3, 4];
+let ro: ReadonlyArray<number> = a;
+
+ro[0] = 12; 
+// error,不可修改
+
+ro.push(5);
+// error,不可修改
+
+ro.length = 100;
+// error,不可修改
+
+a = ro; 
+// error,赋值给一个普通数组也不行,但是可以用类型断言重写
+
+a = ro as number[];
+```
+
+定义包含接口中不存在的属性时,ts中会报错:
+
+```
+interface SquareConfig {
+    color?: string;
+    width?: number;
+}
+
+let mySquare: SquareConfig = { msg: "hi", width: 100 };
+//error,SquareConfig中没有msg属性
+
+//可以通过类型断言绕过检查
+let mySquare: SquareConfig = { msg: "hi", width: 100 } as SquareConfig;
+```
