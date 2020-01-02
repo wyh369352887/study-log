@@ -1123,6 +1123,161 @@ interface SquareConfig {
 let mySquare: SquareConfig = { msg: "hi", width: 100 };
 //error,SquareConfig中没有msg属性
 
-//可以通过类型断言绕过检查
+//a.可以通过类型断言绕过检查
 let mySquare: SquareConfig = { msg: "hi", width: 100 } as SquareConfig;
+
+//b.可以通过添加字符索引签名规避该问题
+interface SquareConfig{
+    color?:string;
+    width?:number;
+    [propName:string]:any;  //不限制SquareConfig的属性数量,只要属性名不是color或width,那么他的类型可以是任何值
+}
+
+//c.可以将对象赋值给另一个变量规避该问题
+let squareOptions = {colour:"red",width:100};
+let mySquare = createSquare(squareOptions);//因为squareOpitons不会经过额外属性检查的步骤,所以编译器不会报错
+```
+
+## 2020.1.2
+
+##### 函数类型:接口除了可以描述普通对象,还可以描述函数类型
+
+```
+//定义一个函数类型接口
+interface func {
+    (param1:number ,param2:string):boolean
+}
+//定义了一个有两个参数的函数类型接口,第一个参数为number类型,第二个参数为string类型,函数返回值时boolean类型
+
+let myFunc:func;
+
+myFunc = function(p1,p2):boolean{
+    //do some thing
+    return false
+}
+//函数调用时的参数名不必与接口中的名字相同,编译器会对位检查参数类型,符合即可
+
+```
+
+##### 可索引的类型:
+
+```
+interface StringArray {
+    [index:number]:string
+}
+//支持number和string两种索引方式,但两种方法返回值必须保持一致
+
+let myArray:StringArray;
+myArray = ["red","blue"];
+
+let myStr:string = myArray[0]
+
+//可以将索引签名前加"readonly"将索引设为只读
+interface StringArray {
+    readonly [index:number]:string
+}
+```
+
+##### 类 类型:强制一个类去符合某种契约
+
+```
+interface ClockInterface {
+    currentTime:Date;
+    setTime(d:Date);
+}
+
+class Clock implements ClockInterface {
+    currentTime:Date;
+    setTime(d:Date){
+        //do some thing
+    };
+    constructor(h:number,m:number){};
+}
+//接口规定了类的公共成员,不检查私有成员
+```
+
+##### 接口的继承:
+
+```
+interface Shape {
+    color: string;
+}
+
+interface Square extends Shape {
+    sideLength: number;
+}
+
+let square = <Square>{};
+square.color = "blue";
+square.sideLength = 10;
+```
+
+一个接口也可以继承多个接口
+
+```
+interface Shape {
+    color: string;
+}
+
+interface PenStroke {
+    penWidth: number;
+}
+
+interface Square extends Shape, PenStroke {
+    sideLength: number;
+}
+
+let square = <Square>{};
+square.color = "blue";
+square.sideLength = 10;
+square.penWidth = 5.0;
+```
+
+##### 混合类型接口:
+
+```
+//一个对象可以同时作为函数和对象使用,并带有额外的属性
+interface Counter {
+    (start: number): string;
+    interval: number;
+    reset(): void;
+}
+
+function getCounter(): Counter {
+    let counter = <Counter>function (start: number) { };
+    counter.interval = 123;
+    counter.reset = function () { };
+    return counter;
+}
+
+let c = getCounter();
+c(10);
+c.reset();
+c.interval = 5.0;
+```
+
+##### 接口继承类:
+
+```
+//接口继承类时,同时继承了类的私有成员,因此只有类的子类才能实现接口,因为只有类的子类能拥有这个私有成员
+class Control {
+    private state: any;
+}
+
+interface SelectableControl extends Control {
+    select(): void;
+}
+
+class Button extends Control implements SelectableControl {
+    select() { }
+}
+
+class TextBox extends Control {
+    select() { }
+}
+
+// 错误：“Image”类型缺少“state”属性。
+class Image implements SelectableControl {
+    select() { }
+}
 ```
