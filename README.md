@@ -1451,3 +1451,108 @@ let howard = new Employee("Howard", "Sales");
 let john = new Person("John"); // 错误: 'Person' 的构造函数是被保护的.
 ```
 
+## 2020.1.6 
+
+##### readonly修饰符:只读属性必须在声明时或构造函数内被初始化
+
+```
+class Octopus {
+    readonly name: string;
+    readonly numberOfLegs: number = 8;
+    constructor (theName: string) {
+        this.name = theName;
+    }
+}
+let dad = new Octopus("Man with the 8 strong legs");//通过构造函数初始化
+dad.name = "Man with the 3-piece suit"; // 错误! name 是只读的.
+```
+
+##### 存取器:截取对对象成员的访问和设置操作
+
+```
+let passcode = "secret passcode";
+
+class Employee {
+    private _fullName: string;
+
+    get fullName(): string {
+        return this._fullName;
+    }
+
+    set fullName(newName: string) {
+        if (passcode && passcode == "secret passcode")
+        //设置对象成员时添加验证条件
+            this._fullName = newName;
+        }
+        else {
+            console.log("Error: Unauthorized update of employee!");
+        }
+    }
+}
+
+let employee = new Employee();
+employee.fullName = "Bob Smith";
+if (employee.fullName) {
+    alert(employee.fullName);
+}
+
+//*只有get没有set方法的属性被编译器自动推断成readonly
+```
+
+##### 类的静态属性:在实例上访问类的静态属性时,要通过`类名.`调用
+
+```
+class Grid {
+    static origin = {x: 0, y: 0};
+    calculateDistanceFromOrigin(point: {x: number; y: number;}) {
+        let xDist = (point.x - Grid.origin.x);
+        let yDist = (point.y - Grid.origin.y);
+        return Math.sqrt(xDist * xDist + yDist * yDist) / this.scale;
+    }
+    constructor (public scale: number) { }
+}
+
+let grid1 = new Grid(1.0);  // 1x scale
+let grid2 = new Grid(5.0);  // 5x scale
+
+console.log(grid1.calculateDistanceFromOrigin({x: 10, y: 10}));
+console.log(grid2.calculateDistanceFromOrigin({x: 10, y: 10}));
+```
+
+##### 抽象类、抽象方法:使用`abstract`定义,不能直接实例化一个抽象类,抽象类中可以包含成员的实现细节,但是抽象方法方法体必须在派生类中实现
+
+```
+abstract class Department {
+
+    constructor(public name: string) {
+    }
+
+    printName(): void {
+        console.log('Department name: ' + this.name);
+    }
+
+    abstract printMeeting(): void; // 必须在派生类中实现
+}
+
+class AccountingDepartment extends Department {
+
+    constructor() {
+        super('Accounting and Auditing'); // 在派生类的构造函数中必须调用 super()
+    }
+
+    printMeeting(): void {
+        console.log('The Accounting Department meets each Monday at 10am.');
+    }
+
+    generateReports(): void {
+        console.log('Generating accounting reports...');
+    }
+}
+
+//let department: Department; 可以,允许创建一个对抽象类型的引用
+//let department = new Department(); 错误: 不能创建一个抽象类的实例
+//let department = new AccountingDepartment(); 可以,允许对一个抽象子类进行实例化和赋值
+//department.printName(); Department name: Accounting and Auditing
+//department.printMeeting(); The Accounting Department meets each Monday at 10am.
+```
+
