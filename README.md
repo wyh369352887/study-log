@@ -1555,3 +1555,81 @@ class AccountingDepartment extends Department {
 //department.printName(); Department name: Accounting and Auditing
 //department.printMeeting(); The Accounting Department meets each Monday at 10am.
 ```
+
+## 2020.1.7
+
+### 函数
+
+##### 为函数定义类型
+
+```
+function add(x: number, y: number): number {
+    return x + y;
+}
+
+let myAdd = function(x: number, y: number): number { return x + y; };
+
+//完整的函数定义例子
+
+let myAdd: (x: number, y: number) => number = function(x: number, y: number): number { 
+    return x + y; 
+};
+```
+
+##### 可选参数和默认参数
+
+```
+//可选参数:在参数名旁边+？
+function buildName(firstName: string, lastName?: string) {//lastName是可选参数
+    if (lastName)
+        return firstName + " " + lastName;
+    else
+        return firstName;
+}
+//可选参数必须跟在必须参数后面
+```
+
+```
+//带默认值的参数
+function buildName(firstName: string, lastName = "Smith") {
+    return firstName + " " + lastName;
+}
+//带默认值的参数无需放在最后,但是想要取到参数的默认值,在调用时需给对应位置的参数传递undefined
+
+let result = buildName("Bob", undefined); 
+```
+
+##### 剩余参数
+
+```
+//用省略号表示
+function buildName(firstName: string, ...restOfName: string[]) {
+  return firstName + " " + restOfName.join(" ");
+}
+```
+
+##### 函数重载
+
+```
+//根据不同的参数类型返回不同的结果
+let suits = ["hearts", "spades", "clubs", "diamonds"];
+
+function pickCard(x: {suit: string; card: number; }[]): number;
+function pickCard(x: number): {suit: string; card: number; };
+function pickCard(x): any {
+    if (typeof x == "object") {
+        let pickedCard = Math.floor(Math.random() * x.length);
+        return pickedCard;
+    }
+    else if (typeof x == "number") {
+        let pickedSuit = Math.floor(x / 13);
+        return { suit: suits[pickedSuit], card: x % 13 };
+    }
+}
+
+let myDeck = [{ suit: "diamonds", card: 2 }, { suit: "spades", card: 10 }, { suit: "hearts", card: 4 }];
+
+let pickedCard1 = myDeck[pickCard(myDeck)];
+
+let pickedCard2 = pickCard(15);
+```
