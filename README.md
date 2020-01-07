@@ -1555,4 +1555,3 @@ class AccountingDepartment extends Department {
 //department.printName(); Department name: Accounting and Auditing
 //department.printMeeting(); The Accounting Department meets each Monday at 10am.
 ```
-
