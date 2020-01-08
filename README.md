@@ -1633,3 +1633,118 @@ let pickedCard1 = myDeck[pickCard(myDeck)];
 
 let pickedCard2 = pickCard(15);
 ```
+
+## 2020.1.8 
+
+## 泛型
+
+##### 泛型函数
+
+```
+//使用类型变量,在函数名后边加<>
+function identity<T>(arg: T): T {
+    return arg;
+}
+//函数的返回值类型和参数类型保持一致:T
+//只关心函数的返回值和参数的类型是否一致,不必关心他们具体是什么类型
+
+//调用
+//传入具体的类型
+let output = identity<string>("myString");
+
+//不传入具体类型,使用类型推论,编译器会根据传入的值自动判断函数返回值的类型
+let output = identity("myString");
+```
+
+##### 泛型接口
+
+```
+//将泛型函数的签名作为整个接口的一个参数
+interface GenericIdentityFn {
+    <T>(arg: T): T;
+}
+
+function identity<T>(arg: T): T {
+    return arg;
+}
+
+let myIdentity: GenericIdentityFn = identity;
+```
+
+##### 泛型类
+
+```
+//与泛型函数类似,在类名后加<>
+class GenericNumber<T> {
+    zeroValue: T;
+    add: (x: T, y: T) => T;
+}
+
+let myGenericNumber = new GenericNumber<number>();
+myGenericNumber.zeroValue = 0;
+myGenericNumber.add = function(x, y) { return x + y; };
+```
+
+##### *不能创建泛型枚举和泛型命名空间
+
+##### 泛型约束:可以定义一个接口来描述约束条件
+
+```
+interface lengthWise {
+    length:number
+}
+
+function loggingIdentify<T extends lengthWise>(arg:T):T{
+    console.log(arg.length);
+    return arg
+}
+//如果没有约束条件,编译器不能保证每一种类型的值都具有length属性,所以会报错
+//添加了约束条件后,不再适用于所有类型
+
+loggingIdentify(3);
+//error,number类型没有Length属性
+```
+
+## 枚举:定义一些带名字的常量。ts支持数字的和基于字符串的枚举
+
+```
+//数字枚举
+enum Direction = {
+    Up = 1,
+    Down,
+    Left,
+    Right
+}
+//Up的值初始化为1,其余的成员会从1开始增长:2、3、4
+//不初始化的情况下默认从0开始
+
+//字符串枚举:没有自增长行为,所以每个成员必须初始化
+enum Direction {
+    Up = "UP",
+    Down = "DOWN",
+    Left = "LEFT",
+    Right = "RIGHT",
+}
+
+//异构枚举:混合了数字枚举和字符串枚举
+enum BooleanLikeHeterogeneousEnum {
+    No = 0,
+    Yes = "YES",
+}
+
+//反向映射:通过枚举成员的值查找枚举成员
+enum Enum {
+    A
+}
+let a = Enum.A;
+let nameOfA = Enum[a]; // "A"
+
+//外部枚举:用来描述已经存在的枚举类型的形状
+declare enum Enum {
+    A = 1,
+    B,
+    C = 2
+}
+//不同的一点:在正常的枚举里没有初始化的成员被当成是常数成员,在外部枚举里,没有初始化的成员被当成是需要经过计算的
+
+```
