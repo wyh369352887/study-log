@@ -1748,3 +1748,109 @@ declare enum Enum {
 //不同的一点:在正常的枚举里没有初始化的成员被当成是常数成员,在外部枚举里,没有初始化的成员被当成是需要经过计算的
 
 ```
+
+## 2020.1.9
+
+## 类型兼容性
+
+##### ts中结构化类型的基本规则是:如果x要兼容y,那么y至少具有与x相同的属性
+
+```
+interface Named {
+    name: string;
+}
+
+let x: Named;
+let y = { name: 'Alice', location: 'Seattle' };
+x = y;
+//success,编译器会检查在y中能否找到与x对应的属性
+```
+
+##### 比较两个函数
+
+```
+//针对参数列表:是否能将x赋值给y,要看x的参数列表中的每个参数是否在y中能找到对应的,不要求参数名相同,只要求类型相同(允许忽略参数)
+let x = (a: number) => 0;
+let y = (b: number, s: string) => 0;
+
+y = x; // OK
+x = y; // Error
+
+//针对返回值:与针对参数列表时相反,被赋值函数的返回值必须是赋值函数返回值的子类型(不允许忽略返回值的属性)
+let x = () => ({name: 'Alice'});
+let y = () => ({name: 'Alice', location: 'Seattle'});
+
+x = y; // OK
+y = x; // Error, because x() lacks a location property
+```
+
+##### 数字类型和枚举类型互相兼容,但是不同的枚举类型之间互不兼容
+
+```
+enum Status { Ready, Waiting };
+enum Color { Red, Blue, Green };
+
+let status = Status.Ready;
+status = Color.Green;  // Error
+```
+
+##### 比较两个类:只比较实例的成员,静态成员和构造函数不会被比较
+
+```
+class Animal {
+    feet: number;
+    constructor(name: string, numFeet: number) { }
+}
+
+class Size {
+    feet: number;
+    constructor(numFeet: number) { }
+}
+
+let a: Animal;
+let s: Size;
+
+a = s;  // OK, a.feet = s.feet also OK
+
+//类具有pravite、protected属性时,只有当两个实例包含来自同一个类的该属性时才兼容
+class Animal {
+    feet: number;
+    private name:string;
+    constructor(name: string, numFeet: number) { }
+}
+class Person{
+    feet: number;
+    private name:string;
+    constructor(name: string, numFeet: number) { }
+}
+
+let a: Animal;
+let b: Person;
+let c: Animal;
+
+a = b;//error
+a = c;//OK
+```
+
+##### 比较泛型
+
+```
+interface Empty<T> {
+}
+let x: Empty<number>;
+let y: Empty<string>;
+
+x = y;  // OK, because y matches structure of x
+
+//泛型内没有属性时,相当于比较两个any类型
+
+interface NotEmpty<T> {
+    data: T;
+}
+let x: NotEmpty<number>;
+let y: NotEmpty<string>;
+
+x = y;  // Error, because x and y are not compatible
+
+//泛型内有属性时,属性有了类型就不再兼容
+```
