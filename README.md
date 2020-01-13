@@ -1854,3 +1854,304 @@ x = y;  // Error, because x and y are not compatible
 
 //泛型内有属性时,属性有了类型就不再兼容
 ```
+
+## 2020.1.10
+
+## 高级类型
+
+##### 交叉类型:"&"
+
+```
+//包含了所需的每个类型的所有成员
+function extend<T, U>(first: T, second: U): T & U {
+    let result = <T & U>{};
+    for (let id in first) {
+        (<any>result)[id] = (<any>first)[id];
+    }
+    for (let id in second) {
+        if (!result.hasOwnProperty(id)) {
+            (<any>result)[id] = (<any>second)[id];
+        }
+    }
+    return result;
+}
+
+class Person {
+    constructor(public name: string) { }
+}
+interface Loggable {
+    log(): void;
+}
+class ConsoleLogger implements Loggable {
+    log() {
+        // ...
+    }
+}
+var jim = extend(new Person("Jim"), new ConsoleLogger());
+var n = jim.name;
+jim.log();
+
+//交叉类型jim包含了Person类的name属性和ConsoleLogger类的log()方法
+```
+
+##### 联合类型:"|"
+
+```
+//包含了所需的类型中的共有成员
+interface Bird {
+    fly();
+    layEggs();
+}
+
+interface Fish {
+    swim();
+    layEggs();
+}
+
+function getSmallPet(): Fish | Bird {
+    // return something
+}
+
+let pet = getSmallPet();
+pet.layEggs(); // okay
+pet.swim();    // errors
+
+联合类型pet只包含了Bird、Fish类所共有的layEggs()方法
+```
+
+##### 类型保护
+
+```
+//用户自定义类型的保护: parameterName is Type
+//定义一个函数,返回一个类型谓词
+function isFish(pet: Fish | Bird): pet is Fish {
+    return (<Fish>pet).swim !== undefined;
+}
+
+//调用isFish()并传入一个变量时会返回变量是否属于这个类型
+if (isFish(pet)) {
+    pet.swim();
+}
+else {
+    pet.fly();
+}
+//*注意TypeScript不仅知道在 if分支里 pet是 Fish类型； 它还清楚在 else分支里，一定 不是 Fish类型，一定是 Bird类型
+
+
+//原始类型的保护:typeof
+//typeof类型保护可以不必抽成一个函数
+function padLeft(value: string, padding: string | number) {
+    if (typeof padding === "number") {
+        return Array(padding + 1).join(" ") + value;
+    }
+    if (typeof padding === "string") {
+        return padding + value;
+    }
+    throw new Error(`Expected string or number, got '${padding}'.`);
+}
+
+
+//instanceof类型保护:要求instanceof右侧是一个具体的构造函数
+interface Padder {
+    getPaddingString(): string
+}
+
+class SpaceRepeatingPadder implements Padder {
+    constructor(private numSpaces: number) { }
+    getPaddingString() {
+        return Array(this.numSpaces + 1).join(" ");
+    }
+}
+
+class StringPadder implements Padder {
+    constructor(private value: string) { }
+    getPaddingString() {
+        return this.value;
+    }
+}
+
+function getRandomPadder() {
+    return Math.random() < 0.5 ?
+        new SpaceRepeatingPadder(4) :
+        new StringPadder("  ");
+}
+
+// 类型为SpaceRepeatingPadder | StringPadder
+let padder: Padder = getRandomPadder();
+
+if (padder instanceof SpaceRepeatingPadder) {
+    padder; // 类型细化为'SpaceRepeatingPadder'
+}
+if (padder instanceof StringPadder) {
+    padder; // 类型细化为'StringPadder'
+}
+
+```
+
+##### --strictNullChecks标记
+
+```
+//当你声明一个变量时，它不会自动地包含 null或 undefined。 你可以使用联合类型明确的包含它们
+let s = "foo";
+s = null; // 错误, 'null'不能赋值给'string'
+let sn: string | null = "bar";
+sn = null; // 可以
+
+sn = undefined; // error, 'undefined'不能赋值给'string | null'
+
+//对于可选参数和可选属性,会被自动添加变成 'type || undefined'
+function f(x: number, y?: number) {
+    return x + (y || 0);
+}
+f(1, 2);
+f(1);
+f(1, undefined);
+f(1, null); // error, 'null' is not assignable to 'number | undefined'
+
+class C {
+    a: number;
+    b?: number;
+}
+let c = new C();
+c.a = 12;
+c.a = undefined; // error, 'undefined' is not assignable to 'number'
+c.b = 13;
+c.b = undefined; // ok
+c.b = null; // error, 'null' is not assignable to 'number | undefined'
+
+//由于值可以是null的类型使用了联合类型,在需要去除null类型时,如果编译器不能够去除null或undefined,可以再标识符后加!手动使用类型断言去除
+function foo(s:number | null){
+    console.log(s.toString());//error,s有可能是null
+}
+
+function foo(s:number | null){
+    console.log(s!.toString());//ok,手动去除了null和undefined
+}
+```
+
+## 2020.1.13
+
+##### 类型别名:给类型起一个新名字。并不会创建一个新类型,只是创建了一个新名字来引用该类型
+
+```
+type Name = string;
+type NameResolver = () => string;
+type NameOrResolver = Name | NameResolver;
+function getName(n: NameOrResolver): Name {
+    if (typeof n === 'string') {
+        return n;
+    }
+    else {
+        return n();
+    }
+}
+```
+
+##### 字符串字面量类型:可以指定允许的值
+
+```
+//字符串字面量类型与类型别名结合
+type Easing = "ease-in" | "ease-out" | "ease-in-out";
+
+class UIElement {
+    animate(dx: number, dy: number, easing: Easing) {
+        if (easing === "ease-in") {
+            // ...
+        }
+        else if (easing === "ease-out") {
+        }
+        else if (easing === "ease-in-out") {
+        }
+        else {
+            // error! should not pass null or undefined.
+        }
+    }
+}
+
+let button = new UIElement();
+button.animate(0, 0, "ease-in");
+button.animate(0, 0, "uneasy"); // error: "uneasy" is not allowed here
+```
+
+##### 数字字面量类型
+
+```
+function rollDie(): 1 | 2 | 3 | 4 | 5 | 6 {
+    // ...
+}
+```
+
+##### 可辨识联合:将单例类型、联合类型、类型保护和类型别名合并
+
+```
+interface Square {
+    kind: "square";
+    size: number;
+}
+interface Rectangle {
+    kind: "rectangle";
+    width: number;
+    height: number;
+}
+interface Circle {
+    kind: "circle";
+    radius: number;
+}
+
+type Shape = Square | Rectangle | Circle;
+
+function area(s: Shape) {
+    switch (s.kind) {
+        case "square": return s.size * s.size;
+        case "rectangle": return s.height * s.width;
+        case "circle": return Math.PI * s.radius ** 2;
+    }
+}
+```
+
+##### 多态的this类型
+
+```
+class BasicCalculator {
+    public constructor(protected value: number = 0) { }
+    public currentValue(): number {
+        return this.value;
+    }
+    public add(operand: number): this {
+        this.value += operand;
+        return this;
+    }
+    public multiply(operand: number): this {
+        this.value *= operand;
+        return this;
+    }
+    // ... other operations go here ...
+}
+
+//每个方法都返回this,实现连续调用
+
+let v = new BasicCalculator(2)
+            .multiply(5)
+            .add(1)
+            .currentValue();
+```
+
+##### keyof操作符:对于任意类型T,keyof T返回T上已知的公共属性名的联合
+
+```
+interface Person {
+    name: string;
+    age: number;
+}
+
+let personProps: keyof Person; // 'name' | 'age'
+```
+
+##### T[K]索引访问操作符:编译器会实时返回对应的真实类型
+
+```
+//getProperty里的 o: T和 name: K，意味着 o[name]: T[K]。 当你返回 T[K]的结果，编译器会实例化键的真实类型，因此 getProperty的返回值类型会随着你需要的属性改变。
+let name: string = getProperty(person, 'name');
+let age: number = getProperty(person, 'age');
+let unknown = getProperty(person, 'unknown'); // error, 'unknown' is not in 'name' | 'age'
+```
