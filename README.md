@@ -2155,3 +2155,18 @@ let name: string = getProperty(person, 'name');
 let age: number = getProperty(person, 'age');
 let unknown = getProperty(person, 'unknown'); // error, 'unknown' is not in 'name' | 'age'
 ```
+
+##### 映射类型:从旧类型中创建新类型
+
+```
+type Readonly<T> = {
+    readonly [P in keyof T]: T[P];
+}
+//将类型T中的所有属性变为只读
+
+type Partial<T> = {
+    [P in keyof T]?: T[P];
+}
+//将类型T中的所有属性变为可选
+```
+
