@@ -2170,3 +2170,49 @@ type Partial<T> = {
 //将类型T中的所有属性变为可选
 ```
 
+##### Symbols
+
+```
+//一些众所周知的内置symbols
+
+//Symbl.hasInstance
+//构造器对象用来识别一个对象是否是其实例
+
+let array:number[] = [];
+
+array instanceof Array; //true
+Array[Symbol.hasInstance](array); //true
+
+//Symbol.isConcatSpreadable
+//布尔值，表示当在一个对象上调用Array.prototype.concat时，这个对象的数组元素是否可展开
+
+let x:number[] = [1];
+let y:number[] = [2];
+let boo = x.concat(y);//[1,2]
+
+let x:number[] = [1];
+let y:number[] = [2];
+x[Symbol.isConcatSpreadable] = false;
+let boo = x.concat(y); //[[1],2],x不能被展开
+
+//Symbol.iterator
+//返回对象的默认迭代器
+
+let x:number[] = [1,2,3];
+x[Symbol.iterator]//ƒ values() { [native code] }
+
+//Symbol.match
+//正则表达式用来匹配字符串
+
+const regexp1 = /foo/;
+
+console.log('/foo/'.startsWith(regexp1));//error,参数应是个正则表达式
+
+regexp1[Symbol.match] = false;
+
+console.log('/foo/'.startsWith(regexp1));
+// ok,true
+
+console.log('/baz/'.endsWith(regexp1));
+// ok,false
+```
