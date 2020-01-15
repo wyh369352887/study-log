@@ -2206,7 +2206,7 @@ x[Symbol.iterator]//ƒ values() { [native code] }
 
 const regexp1 = /foo/;
 
-console.log('/foo/'.startsWith(regexp1));//error,参数应是个正则表达式
+console.log('/foo/'.startsWith(regexp1));//error,第一个参数不应是个正则表达式
 
 regexp1[Symbol.match] = false;
 
@@ -2215,4 +2215,102 @@ console.log('/foo/'.startsWith(regexp1));
 
 console.log('/baz/'.endsWith(regexp1));
 // ok,false
+
+//Symbol.replace
+//指向一个方法，当对象被String.prototype.replace方法调用时，会返回该方法的返回值
+
+const x = {};
+x[Symbol.replace] = (...s) => console.log(s);
+'Hello'.replace(x, 'World') // ["Hello", "World"]
+
+//Symbol.search
+//接受一个正则表达式,返回该正则表达式在字符串中匹配到的下标
+
+class MySearch {
+  constructor(value) {
+    this.value = value;
+  }
+  [Symbol.search](string) {
+    return string.indexOf(this.value);
+  }
+}
+'foobar'.search(new MySearch('foo')) // 0
+
+//Symbol.split
+//用法与Symbol.search类似,在被String.prototype.split调用时返回该方法的返回值
+
+//
+
+//Symbol.species
+//指向一个构造函数。创建衍生对象时，会使用该属性
+
+class MyArray extends Array {
+}
+
+const a = new MyArray(1, 2, 3);
+const b = a.map(x => x);
+const c = a.filter(x => x > 1);
+
+b instanceof MyArray // true
+c instanceof MyArray // true
+
+//b和c不仅是Array的实例,实际上也是myArray的衍生对象
+//Symbol.species就是为了解决这个问题而提供的
+
+//默认的Symbol.species属性
+static get [Symbol.species]() {
+  return this;
+}
+
+//修改后的Symbol.species属性
+class MyArray extends Array {
+  static get [Symbol.species]() { return Array; }
+}
+
+const a = new MyArray();
+const b = a.map(x => x);
+
+b instanceof MyArray // false
+b instanceof Array // true
+
+//b就不再是a的衍生对象了
+
+//Symbol.toPrimitive
+//指向一个方法,在该对象被转为原始类型的值时调用
+//转换有3种模式:
+//1.转换成数值  'number'
+//2.转换成字符串  'string'
+//3.可以是数值也可以是字符串  'default'
+
+let obj = {
+  [Symbol.toPrimitive](hint) {
+    switch (hint) {
+      case 'number':
+        return 123;
+      case 'string':
+        return 'str';
+      case 'default':
+        return 'default';
+      default:
+        throw new Error();
+     }
+   }
+};
+
+2 * obj // 246
+3 + obj // '3default'
+obj == 'default' // true
+String(obj) // 'str'
+
+//Symbol.toStringTag
+//指向一个方法,在该对象上调用Object.prototype.toString方法时,如果这个属性存在,它的返回值会出现在toString方法返回的字符串中
+//可以用来定制[object Object]或[object Array]等object后面那个字符串的值
+
+class Collection {
+  get [Symbol.toStringTag]() {
+    return 'xxx';
+  }
+}
+let x = new Collection();
+Object.prototype.toString.call(x) // "[object xxx]"
 ```
