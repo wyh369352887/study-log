@@ -2314,3 +2314,44 @@ class Collection {
 let x = new Collection();
 Object.prototype.toString.call(x) // "[object xxx]"
 ```
+
+## 2020.02.26
+
+##### 迭代器和生成器
+
+```
+//for..of和for..in的区别:for..of迭代对象的值,for..in迭代对象的键
+
+let list = [4, 5, 6];
+
+for (let i in list) {
+    console.log(i); // "0", "1", "2",
+}
+
+for (let i of list) {
+    console.log(i); // "4", "5", "6"
+}
+
+//另一个区别是for..in可以操作任何对象,它提供了一种查看对象属性的方法。
+
+let pets = new Set(["Cat", "Dog", "Hamster"]);
+pets["species"] = "mammals";
+
+for (let pet in pets) {
+    console.log(pet); // "species"
+}
+
+for (let pet of pets) {
+    console.log(pet); // "Cat", "Dog", "Hamster"
+}
+```
+
+## 面试整理
+
+事件冒泡：从当前触发的事件目标一级一级向上传递，直到document为止
+事件捕获：从document开始触发，一级一级向下传递，直到真正事件目标为止
+事件委托：通过监听父元素，给不同子元素绑定事件，减少监听次数，从而提升速度
+
+------
+
+__proto__
