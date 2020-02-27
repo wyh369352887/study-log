@@ -2346,6 +2346,12 @@ for (let pet of pets) {
 }
 ```
 
+## 2020.02.27
+
+#####export和import
+
+语法与js类似,但在使用`export = `导出模块时,也必须使用`import = `来导入。
+
 ## 面试整理
 
 ### 事件委托
@@ -2357,6 +2363,7 @@ for (let pet of pets) {
 
 ### 原型链
 ---
+
 `__proto__`和`constructor`属性是对象独有的,`prototype`属性是函数独有的,又因为函数也是一种对象,所以函数也拥有`__proto`和`constructor`属性
 
 从一个实例访问某属性:
@@ -2374,6 +2381,44 @@ F.b   //'value b'
 
 foo.a ==> foo.__proto__.a ==> Object.prototype.a  // 'value a'
 foo.b ==> foo.__proto__.b ==> Object.prototype.b  // undefined
-F.a ==> F.__proto__.a ==> Function.prototype.a ==> Function.prototype.__proto__.a(*:此时把Function.prototype视作一个普通对象) ==> Object.prototype.a // 'value a'
+F.a ==> F.__proto__.a ==> Function.prototype.a ==> Function.prototype.__proto__.a(*此时把Function.prototype视作一个普通对象) ==> Object.prototype.a // 'value a'
 F.b ==> F.__proto__.b ==> Function.prototype.b // 'value b'
 ```
+
+### 构造函数的返回值
+---
+
+构造函数不需要显式的返回值:当return一个非对象时(数字,字符串,布尔值等),会忽略返回值;当return一个对象时,则返回该对象(* return null也会忽略返回值)
+
+### instanceof
+---
+
+作用:测试一个构造函数的`prototype`属性是否存在于一个对象的原型链上,也就是检查对象是否是该构造函数的实例
+```
+let obj = {};
+obj instanceof Object //true
+//obj.__proto__ === Object.prototype;
+```
+
+### 宏任务与微任务
+---
+
+`setTimeout(fn,time)`:延迟`time`秒后将函数`fn`推入主线程队列。由于主线程队列里的任务执行也需要时间,所以一般延迟执行的时间总是大于`time`。同时根据HTML的标准,`setTimeout(fn,0)`也并不是在主线程任务完成后0秒就执行`fn`,最快是4ms。
+
+`setInterval(fn,time)`:每隔`time`秒就将`fn`推入主线程队列一次。与`setTimeout`类似,有一点不同的要注意,如果`fn`的执行时间大于`time`,那么每两次`fn`执行过程之中将完全没有时间间隔。
+
+除了广义的同步任务和异步任务,我们对任务还有更精细的定义:
+
+宏任务:包括整体代码,setTimeout,setInterval
+微任务:Promise,process.nextTick(callback)
+
+js执行顺序:
+```flow
+st=>start: 开始
+op=>operation: My Operation
+cond=>condition: Yes or No?
+e=>end
+st->op->cond
+cond(yes)->e
+cond(no)->op
+&```
