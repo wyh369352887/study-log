@@ -2367,7 +2367,7 @@ for (let pet of pets) {
 `__proto__`和`constructor`属性是对象独有的,`prototype`属性是函数独有的,又因为函数也是一种对象,所以函数也拥有`__proto`和`constructor`属性
 
 从一个实例访问某属性:
-```
+```javascript
 var foo = {},
     F = function(){};
 
@@ -2411,10 +2411,3 @@ obj instanceof Object //true
 
 宏任务:包括整体代码,setTimeout,setInterval
 微任务:Promise,process.nextTick(callback)
-
-js执行顺序:
-st=>start: 开始 
-rain?=>condition: 今天有雨吗？ 
-takeAnUmbrella=>operation: 带伞 
-go=>operation: 出门 
-e=>end: 结束 
