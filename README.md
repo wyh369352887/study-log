@@ -32,7 +32,7 @@
 
 4.封装兼容性高的事件操作程序(没有考虑`this`的指向问题)
 
-```
+```javascript
 var EventUtil = {
     addHandler: function(element, type, handler){
         if (element.addEventListener){
@@ -1057,7 +1057,7 @@ foo(myObj);
 
 ##### 可选属性:属性名后 + ?
 
-```
+```typescript
 interface SquareConfig {
   color?: string;
   width?: number;
@@ -1079,7 +1079,7 @@ let mySquare = createSquare({color: "black"});//参数中没有"width"属性也�
 
 ##### 只读属性:属性名前 + readonly
 
-```
+```typescript
 interface Point {
     readonly x: number;
     readonly y: number;
@@ -1092,7 +1092,7 @@ p1.x = 5;
 // error, x为只读属性
 ```
 
-```
+```typescript
 //ts中具有ReadonlyArray类型,与普通的Array类似,只是把所有可变方法都去掉了,所以是只读数组
 let a: number[] = [1, 2, 3, 4];
 let ro: ReadonlyArray<number> = a;
@@ -1114,7 +1114,7 @@ a = ro as number[];
 
 定义包含接口中不存在的属性时,ts中会报错:
 
-```
+```typescript
 interface SquareConfig {
     color?: string;
     width?: number;
@@ -1142,7 +1142,7 @@ let mySquare = createSquare(squareOptions);//因为squareOpitons不会经过额�
 
 ##### 函数类型:接口除了可以描述普通对象,还可以描述函数类型
 
-```
+```typescript
 //定义一个函数类型接口
 interface func {
     (param1:number ,param2:string):boolean
@@ -1161,7 +1161,7 @@ myFunc = function(p1,p2):boolean{
 
 ##### 可索引的类型:
 
-```
+```typescript
 interface StringArray {
     [index:number]:string
 }
@@ -1180,7 +1180,7 @@ interface StringArray {
 
 ##### 类 类型:强制一个类去符合某种契约
 
-```
+```typescript
 interface ClockInterface {
     currentTime:Date;
     setTime(d:Date);
@@ -1198,7 +1198,7 @@ class Clock implements ClockInterface {
 
 ##### 接口的继承:
 
-```
+```typescript
 interface Shape {
     color: string;
 }
@@ -1214,7 +1214,7 @@ square.sideLength = 10;
 
 一个接口也可以继承多个接口
 
-```
+```typescript
 interface Shape {
     color: string;
 }
@@ -1235,7 +1235,7 @@ square.penWidth = 5.0;
 
 ##### 混合类型接口:
 
-```
+```typescript
 //一个对象可以同时作为函数和对象使用,并带有额外的属性
 interface Counter {
     (start: number): string;
@@ -1258,7 +1258,7 @@ c.interval = 5.0;
 
 ##### 接口继承类:
 
-```
+```typescript
 //接口继承类时,同时继承了类的私有成员,因此只有类的子类才能实现接口,因为只有类的子类能拥有这个私有成员
 class Control {
     private state: any;
@@ -1288,7 +1288,7 @@ class Image implements SelectableControl {
 
 ##### 类的继承
 
-```
+```typescript
 class Animal{
     move(distanceInMeters:number = 0){
         console.log(`Animal moved ${distanceInMeters}m.`);
@@ -1313,7 +1313,7 @@ dog.bark();
 派生类包含了一个构造函数，它 必须调用 super()，它会执行基类的构造函数。 而且，在构造函数里访问 this的属性之前，我们 一定要调用 super()。 这个是TypeScript强制执行的一条重要规则。
 
 
-```
+```typescript
 class Animal {
     name: string;
     constructor(theName: string) { this.name = theName; }
@@ -1353,7 +1353,7 @@ tom.move(34);
 
 类的成员默认为公开的(public),声明是不表明等同于在属性、方法或构造函数前加 `public`
 
-```
+```typescript
 class Animal {
     public name: string;
     public constructor(theName: string) { this.name = theName; }
@@ -1365,7 +1365,7 @@ class Animal {
 
 ##### 私有成员:private
 
-```
+```typescript
 class Animal {
     private name: string;
     constructor(theName: string) { this.name = theName; }
@@ -1376,7 +1376,7 @@ new Animal("Cat").name; // 错误: 'name' 是私有的.
 
 当我们比较带有 private或 protected成员的类型的时候，情况就不同了。 如果其中一个类型里包含一个 private成员，那么只有当另外一个类型中也存在这样一个 private成员， 并且它们都是来自同一处声明时，我们才认为这两个类型是兼容的。 对于 protected成员也使用这个规则:
 
-```
+```typescript
 class Animal {
     private name: string;
     constructor(theName: string) { this.name = theName; }
@@ -1401,7 +1401,7 @@ animal = employee;//error,animal和employee不兼容,他们的私有成员name�
 
 ##### protected:行为与`private`成员类似,但是可以在派生类中访问
 
-```
+```typescript
 class Person {
     protected name: string;
     constructor(name: string) { this.name = name; }
@@ -1427,7 +1427,7 @@ console.log(howard.name); // 错误,protected成员只能在本身和派生类�
 
 ##### 可以将构造函数标记成`protected`成员,意味着不能直接通过这个类创造实例,但是可以先继承,再通过派生类创造实例
 
-```
+```typescript
 class Person {
     protected name: string;
     protected constructor(theName: string) { this.name = theName; }
@@ -1455,7 +1455,7 @@ let john = new Person("John"); // 错误: 'Person' 的构造函数是被保护�
 
 ##### readonly修饰符:只读属性必须在声明时或构造函数内被初始化
 
-```
+```typescript
 class Octopus {
     readonly name: string;
     readonly numberOfLegs: number = 8;
@@ -1469,7 +1469,7 @@ dad.name = "Man with the 3-piece suit"; // 错误! name 是只读的.
 
 ##### 存取器:截取对对象成员的访问和设置操作
 
-```
+```typescript
 let passcode = "secret passcode";
 
 class Employee {
@@ -1501,7 +1501,7 @@ if (employee.fullName) {
 
 ##### 类的静态属性:在实例上访问类的静态属性时,要通过`类名.`调用
 
-```
+```typescript
 class Grid {
     static origin = {x: 0, y: 0};
     calculateDistanceFromOrigin(point: {x: number; y: number;}) {
@@ -1521,7 +1521,7 @@ console.log(grid2.calculateDistanceFromOrigin({x: 10, y: 10}));
 
 ##### 抽象类、抽象方法:使用`abstract`定义,不能直接实例化一个抽象类,抽象类中可以包含成员的实现细节,但是抽象方法方法体必须在派生类中实现
 
-```
+```typescript
 abstract class Department {
 
     constructor(public name: string) {
@@ -1562,7 +1562,7 @@ class AccountingDepartment extends Department {
 
 ##### 为函数定义类型
 
-```
+```typescript
 function add(x: number, y: number): number {
     return x + y;
 }
@@ -1578,7 +1578,7 @@ let myAdd: (x: number, y: number) => number = function(x: number, y: number): nu
 
 ##### 可选参数和默认参数
 
-```
+```typescript
 //可选参数:在参数名旁边+？
 function buildName(firstName: string, lastName?: string) {//lastName是可选参数
     if (lastName)
@@ -1589,7 +1589,7 @@ function buildName(firstName: string, lastName?: string) {//lastName是可选参
 //可选参数必须跟在必须参数后面
 ```
 
-```
+```typescript
 //带默认值的参数
 function buildName(firstName: string, lastName = "Smith") {
     return firstName + " " + lastName;
@@ -1601,7 +1601,7 @@ let result = buildName("Bob", undefined);
 
 ##### 剩余参数
 
-```
+```typescript
 //用省略号表示
 function buildName(firstName: string, ...restOfName: string[]) {
   return firstName + " " + restOfName.join(" ");
@@ -1610,7 +1610,7 @@ function buildName(firstName: string, ...restOfName: string[]) {
 
 ##### 函数重载
 
-```
+```typescript
 //根据不同的参数类型返回不同的结果
 let suits = ["hearts", "spades", "clubs", "diamonds"];
 
@@ -1640,7 +1640,7 @@ let pickedCard2 = pickCard(15);
 
 ##### 泛型函数
 
-```
+```typescript
 //使用类型变量,在函数名后边加<>
 function identity<T>(arg: T): T {
     return arg;
@@ -1658,7 +1658,7 @@ let output = identity("myString");
 
 ##### 泛型接口
 
-```
+```typescript
 //将泛型函数的签名作为整个接口的一个参数
 interface GenericIdentityFn {
     <T>(arg: T): T;
@@ -1673,7 +1673,7 @@ let myIdentity: GenericIdentityFn = identity;
 
 ##### 泛型类
 
-```
+```typescript
 //与泛型函数类似,在类名后加<>
 class GenericNumber<T> {
     zeroValue: T;
@@ -1689,7 +1689,7 @@ myGenericNumber.add = function(x, y) { return x + y; };
 
 ##### 泛型约束:可以定义一个接口来描述约束条件
 
-```
+```typescript
 interface lengthWise {
     length:number
 }
@@ -1707,7 +1707,7 @@ loggingIdentify(3);
 
 ## 枚举:定义一些带名字的常量。ts支持数字的和基于字符串的枚举
 
-```
+```typescript
 //数字枚举
 enum Direction = {
     Up = 1,
@@ -1755,7 +1755,7 @@ declare enum Enum {
 
 ##### ts中结构化类型的基本规则是:如果x要兼容y,那么y至少具有与x相同的属性
 
-```
+```typescript
 interface Named {
     name: string;
 }
@@ -1768,7 +1768,7 @@ x = y;
 
 ##### 比较两个函数
 
-```
+```typescript
 //针对参数列表:是否能将x赋值给y,要看x的参数列表中的每个参数是否在y中能找到对应的,不要求参数名相同,只要求类型相同(允许忽略参数)
 let x = (a: number) => 0;
 let y = (b: number, s: string) => 0;
@@ -1786,7 +1786,7 @@ y = x; // Error, because x() lacks a location property
 
 ##### 数字类型和枚举类型互相兼容,但是不同的枚举类型之间互不兼容
 
-```
+```typescript
 enum Status { Ready, Waiting };
 enum Color { Red, Blue, Green };
 
@@ -1796,7 +1796,7 @@ status = Color.Green;  // Error
 
 ##### 比较两个类:只比较实例的成员,静态成员和构造函数不会被比较
 
-```
+```typescript
 class Animal {
     feet: number;
     constructor(name: string, numFeet: number) { }
@@ -1834,7 +1834,7 @@ a = c;//OK
 
 ##### 比较泛型
 
-```
+```typescript
 interface Empty<T> {
 }
 let x: Empty<number>;
@@ -1861,7 +1861,7 @@ x = y;  // Error, because x and y are not compatible
 
 ##### 交叉类型:"&"
 
-```
+```typescript
 //包含了所需的每个类型的所有成员
 function extend<T, U>(first: T, second: U): T & U {
     let result = <T & U>{};
@@ -1896,7 +1896,7 @@ jim.log();
 
 ##### 联合类型:"|"
 
-```
+```typescript
 //包含了所需的类型中的共有成员
 interface Bird {
     fly();
@@ -1921,7 +1921,7 @@ pet.swim();    // errors
 
 ##### 类型保护
 
-```
+```typescript
 //用户自定义类型的保护: parameterName is Type
 //定义一个函数,返回一个类型谓词
 function isFish(pet: Fish | Bird): pet is Fish {
@@ -1990,7 +1990,7 @@ if (padder instanceof StringPadder) {
 
 ##### --strictNullChecks标记
 
-```
+```typescript
 //当你声明一个变量时，它不会自动地包含 null或 undefined。 你可以使用联合类型明确的包含它们
 let s = "foo";
 s = null; // 错误, 'null'不能赋值给'string'
@@ -2033,7 +2033,7 @@ function foo(s:number | null){
 
 ##### 类型别名:给类型起一个新名字。并不会创建一个新类型,只是创建了一个新名字来引用该类型
 
-```
+```typescript
 type Name = string;
 type NameResolver = () => string;
 type NameOrResolver = Name | NameResolver;
@@ -2049,7 +2049,7 @@ function getName(n: NameOrResolver): Name {
 
 ##### 字符串字面量类型:可以指定允许的值
 
-```
+```typescript
 //字符串字面量类型与类型别名结合
 type Easing = "ease-in" | "ease-out" | "ease-in-out";
 
@@ -2075,7 +2075,7 @@ button.animate(0, 0, "uneasy"); // error: "uneasy" is not allowed here
 
 ##### 数字字面量类型
 
-```
+```typescript
 function rollDie(): 1 | 2 | 3 | 4 | 5 | 6 {
     // ...
 }
@@ -2083,7 +2083,7 @@ function rollDie(): 1 | 2 | 3 | 4 | 5 | 6 {
 
 ##### 可辨识联合:将单例类型、联合类型、类型保护和类型别名合并
 
-```
+```typescript
 interface Square {
     kind: "square";
     size: number;
@@ -2111,7 +2111,7 @@ function area(s: Shape) {
 
 ##### 多态的this类型
 
-```
+```typescript
 class BasicCalculator {
     public constructor(protected value: number = 0) { }
     public currentValue(): number {
@@ -2138,7 +2138,7 @@ let v = new BasicCalculator(2)
 
 ##### keyof操作符:对于任意类型T,keyof T返回T上已知的公共属性名的联合
 
-```
+```typescript
 interface Person {
     name: string;
     age: number;
@@ -2149,7 +2149,7 @@ let personProps: keyof Person; // 'name' | 'age'
 
 ##### T[K]索引访问操作符:编译器会实时返回对应的真实类型
 
-```
+```typescript
 //getProperty里的 o: T和 name: K，意味着 o[name]: T[K]。 当你返回 T[K]的结果，编译器会实例化键的真实类型，因此 getProperty的返回值类型会随着你需要的属性改变。
 let name: string = getProperty(person, 'name');
 let age: number = getProperty(person, 'age');
@@ -2158,7 +2158,7 @@ let unknown = getProperty(person, 'unknown'); // error, 'unknown' is not in 'nam
 
 ##### 映射类型:从旧类型中创建新类型
 
-```
+```typescript
 type Readonly<T> = {
     readonly [P in keyof T]: T[P];
 }
@@ -2172,7 +2172,7 @@ type Partial<T> = {
 
 ##### Symbols
 
-```
+```typescript
 //一些众所周知的内置symbols
 
 //Symbl.hasInstance
@@ -2319,7 +2319,7 @@ Object.prototype.toString.call(x) // "[object xxx]"
 
 ##### 迭代器和生成器
 
-```
+```typescript
 //for..of和for..in的区别:for..of迭代对象的值,for..in迭代对象的键
 
 let list = [4, 5, 6];
