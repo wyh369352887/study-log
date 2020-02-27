@@ -2413,6 +2413,8 @@ obj instanceof Object //true
 微任务:Promise,process.nextTick(callback)
 
 js执行顺序:
-mermaid
-graph TD
-A --> B
+st=>start: 开始 
+rain?=>condition: 今天有雨吗？ 
+takeAnUmbrella=>operation: 带伞 
+go=>operation: 出门 
+e=>end: 结束 
