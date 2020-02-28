@@ -2412,6 +2412,7 @@ obj instanceof Object //true
 宏任务:包括整体代码,setTimeout,setInterval
 微任务:Promise,process.nextTick(callback)
 
-js执行顺序:
+#### js执行顺序:
 
 ![loop](https://user-gold-cdn.xitu.io/2017/11/21/15fdcea13361a1ec?imageView2/0/w/1280/h/960/format/webp/ignore-error/1 "流程图")
+
