@@ -2531,4 +2531,37 @@ var app = new Vue({
 
 //此时#app里显示<h1>这里是render函数</h1>
 ```
+`beforeMount`:$el还未挂载
+
+`mounted`:$el已挂载
+
+`beforeUpdate`:data发生改变,页面还未渲染
+
+`updated`:data发生改变,且页面渲染完成
+
+`beforeDestroy`:在实例将要销毁时调用,此时还未销毁,实例仍然可用
+
+`destroyed`:实例销毁后调用,解绑所有子组件、事件监听器、watchers,此时修改实例已不能触发页面的渲染
+
 ---
+
+### vue-router有哪些导航钩子
+
+1. 全局导航钩子:
+  + `router.beforeEach(to,from,next)`:全局前置守卫,每个导航被触发时都会调用
+  + `router.beforeResolve(to,from,next)`:与`router.beforeEach`类似,但是稍晚些触发(在目标路由的`beforeRouterEnter`之后调用)
+  + `afterEach(to,from)`:全局后置钩子,每个导航被触发后都会调用,不接收next函数,所以不会改变导航本身
+2. 组件内钩子:
+  + `beforeRouterEnter`:进入路由前调用,不能访问`this`,因为实例还没被创建,可以通过next(vm => {})回调来访问该实例
+  + `beforeRouterUpdate`:在改变路由,并复用当前组件时调用,可以访问`this`
+  + `beforeRouterLeave`:离开该组件的路由时调用,可以访问`this`
+3. 路由独享的钩子:
+  + `beforeEnter`:某个路由独享的守卫,参数与全局前置守卫一致
+
+钩子触发顺序(a -> b):
+1.a路由的`beforeLeave`
+2.全局前置守卫`router.beforeEach`
+3.b的独享守卫`beforeEnter`
+4.b的`beforeRouteEnter`
+5.全局解析守卫`router.beforeResolve`
+6.全局后置守卫`router.afterEach`
