@@ -2558,10 +2558,10 @@ var app = new Vue({
 3. 路由独享的钩子:
   + `beforeEnter`:某个路由独享的守卫,参数与全局前置守卫一致
 
-钩子触发顺序(a -> b):
-1.a路由的`beforeLeave`
-2.全局前置守卫`router.beforeEach`
-3.b的独享守卫`beforeEnter`
-4.b的`beforeRouteEnter`
-5.全局解析守卫`router.beforeResolve`
-6.全局后置守卫`router.afterEach`
+#### 钩子触发顺序(a -> b):
+1. a路由的`beforeLeave`
+2. 全局前置守卫`router.beforeEach`
+3. b的独享守卫`beforeEnter`
+4. b的`beforeRouteEnter`
+5. 全局解析守卫`router.beforeResolve`
+6. 全局后置守卫`router.afterEach`
