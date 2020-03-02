@@ -2496,7 +2496,6 @@ HTTP请求都是由状态行、请求/响应头、消息主体三部分组成,�
 中间人攻击即:假设不存在认证机构,人人都可以伪造证书,那么中间人可以先伪装成服务端和客户端通信,又伪装成客户端和服务端通信,虽然使用了HTTPS,但是缺少证书的验证过程,数据安全依然无法得到保障。
 
 ## Vue相关
----
 
 ### vue有哪些生命周期
 
@@ -2506,8 +2505,30 @@ HTTP请求都是由状态行、请求/响应头、消息主体三部分组成,�
 
 `created`和`beforeMount`之间的阶段:
 
-1. 判断是否有el选项:
+1. 判断是否有`el`选项:
   + 有,继续向下编译
   + 无,停止编译,停止生命周期
-  
+2. 判断是否有`template`选项:
+  + 有,将`template`作为模板编译成render函数
+  + 无,将外部的HTML作为模板编译
+  + (template中模板的优先级要高于外部HTML,如果同时存在render函数、template选项、外部HTML,则render函数的优先级最高,见下面代码)
+
+```HTML
+<body>
+    <div id="app">
+        <h1>这里是外部HTML</h1>
+    </div>
+</body>
+<script>
+var app = new Vue({
+    el:'#app',
+    template:'<h1>这里是template选项</h1>',
+    render:function(createElement){
+        return createElement('h1','这里是render函数')
+    }
+})
+</script>
+
+//此时#app里显示<h1>这里是render函数</h1>
+```
 ---
