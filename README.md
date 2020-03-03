@@ -2565,3 +2565,11 @@ var app = new Vue({
 4. b的`beforeRouteEnter`
 5. 全局解析守卫`router.beforeResolve`
 6. 全局后置守卫`router.afterEach`
+
+---
+
+### vue数据双向绑定的原理
+
+核心原理是使用`Object.defineProperty()`劫持数据,并添加访问器属性,使data变成可监测对象。
+
+`view层`=>`model层`的改变,由于是简单的一对一关系,通过事件监听即可实现;而`model层`=>`view层`的改变,可能涉及到一对多的情况,则使用了`订阅/发布模式`,在编译模板时,为所有使用了数据的模板元素创建一个`watcher`实例,并将该`watcher`添加到对应的`data`属性的订阅列表中,当某个`data`属性发生改变时,通知到对应的`watcher`实例,再由`watcher`实例对具体的模板元素进行更新。
