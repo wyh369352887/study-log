@@ -2348,7 +2348,7 @@ for (let pet of pets) {
 
 ## 2020.02.27
 
-#####export和import
+##### export和import
 
 语法与js类似,但在使用`export = `导出模块时,也必须使用`import = `来导入。
 
