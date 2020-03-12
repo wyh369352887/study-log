@@ -2588,5 +2588,5 @@ var app = new Vue({
 
 ##### 初始化阶段
 
-new了一个Vue,主要逻辑为:合并逻辑,将用户传入的配置与类本身的默认配置进行合并;调用一些初始化函数(initLifecycle,initEvents,initRender,initInjection,initState,initProvide);触发生命周期钩子函数(beforeCreate,created);最后调用$mount开启下一个阶段
+new了一个Vue,主要逻辑为:合并逻辑,将用户传入的配置与类本身的默认配置进行合并;调用一些初始化函数(initLifecycle,initEvents,initRender,initInjection,initState,initProvide);触发生命周期钩子函数(beforeCreate,created);最后调用$mount开启下一个阶段
 
