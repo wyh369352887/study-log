@@ -2500,7 +2500,7 @@ HTTP请求都是由状态行、请求/响应头、消息主体三部分组成,�
 
 文档中的元素因为几何属性(大小、位置等)改变而影响现有文档布局的时候，浏览器会使这些受影响的元素暂时失效，并重新计算他们的大小、位置等属性，并显示在页面中，这称为回流(重新渲染在页面的过程就是重绘)。
 
-##### restful API风格约束
+### restful API风格约束
 ---
 
 1. uri规范
@@ -2524,6 +2524,69 @@ http://api.example.com/user-management/users/{id}
 http://api.example.com/inventory-management/managed-entities/{id}/install-script-location //更易读
 http://api.example.com/inventory_management/managed_entities/{id}/install_script_location //更容易出错
 ```
+
+4. 在uri中使用小写字母
+
+5. 不使用文件扩展名
+```
+http://api.example.com/device-management/managed-devices.xml / 不要使用它 /
+http://api.example.com/device-management/managed-devices / *这是正确的URI * /
+```
+
+6. 使用查询组件过滤uri集合
+```
+http://api.example.com/device-management/managed-devices
+http://api.example.com/device-management/managed-devices?region=USA
+http://api.example.com/device-management/managed-devices?region=USA&brand=XYZ
+http://api.example.com/device-management/managed-devices?region=USA&brand=XYZ&sort=installation-date
+```
+
+7. 不要在末未使用`/`
+
+8. 使用http状态码定义api执行结果
+`2xx`:成功
+`3xx`:重定向相关
+`4xx`:客户端错误
+`5xx`:服务端错误
+
+9. 版本定义
+uri版本控制:
+```
+http://api.example.com/v1
+http://apiv1.example.com
+```
+
+使用自定义请求标头进行版本控制
+```
+Accept-version：v1
+Accept-version：v2
+```
+使用Accept header进行版本控制:
+```
+Accept:application / vnd.example.v1 + json
+Accept:application / vnd.example + json; version = 1.0
+```
+
+10. 尽量将api部署在专用域名下
+```
+https://api.example.com
+//除非确定api很简单,不会有进一步扩展,则可以放在主域名下
+https://example.org/api/
+```
+
+### Promise API
+---
+
+1. promise.finally:无论promise的状态如何改变,finally中的回调函数总是会执行
+
+2. promise.all:将多个promise封装成一个新的promise实例。
+
+只有当所有promise的状态都变为fulfilled,新实例的状态才变为fulfilled,所有promise的返回值组成一个数组传递给新实例的回调函数。
+
+若有一个promise的状态变为rejected,新实例的状态就变为rejected,此时第一个状态变为rejected的promise的返回值会被传递给新实例的回调函数。
+
+3. promise.race:用法同promise.all一样,不同的是只要有一个promise的状态改变了,新实例的状态都会随之改变(不论fulfilled或rejected)
+
 
 ## Vue相关
 
