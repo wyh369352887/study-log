@@ -2500,6 +2500,31 @@ HTTP请求都是由状态行、请求/响应头、消息主体三部分组成,�
 
 文档中的元素因为几何属性(大小、位置等)改变而影响现有文档布局的时候，浏览器会使这些受影响的元素暂时失效，并重新计算他们的大小、位置等属性，并显示在页面中，这称为回流(重新渲染在页面的过程就是重绘)。
 
+##### restful API风格约束
+---
+
+1. uri规范
+使用名词,如:
+```
+http://api.example.com/class-management/students
+http://api.example.com/device-management/managed-devices/{device-id}
+http://api.example.com/user-management/users/
+http://api.example.com/user-management/users/{id}
+```
+
+2. http method对应不同的请求动作
+`GET`:查询
+`POST`:新增
+`PUT`:更新(全部)
+`PATCH`:更新(部分)
+`DELETE`:删除
+
+3. 使用连字符(-)而不是下划线(_)来提高uri的可读性
+```
+http://api.example.com/inventory-management/managed-entities/{id}/install-script-location //更易读
+http://api.example.com/inventory_management/managed_entities/{id}/install_script_location //更容易出错
+```
+
 ## Vue相关
 
 ### vue有哪些生命周期
