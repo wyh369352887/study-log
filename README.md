@@ -2635,12 +2635,24 @@ https://example.org/api/
     @property {wrap-reverse} 第一行在下方
     */
     flex-flow: <flex-direction> | <flex-wrap>;
-    /* 
-    flex-flow是flex-direction和flex-wrap的简写形式
-    */
+    /* flex-flow是flex-direction和flex-wrap的简写形式 */
     justify-content:flex-start | flex-end | center | space-between | space-around;
     /*  
-    
+    justyify-content属性定义了项目在主轴上的对齐方式
+    @property {flex-start} 与主轴的起点对齐
+    @property {flex-end} 与主轴的终点对齐
+    @property {center} 在主轴上居中对齐
+    @property {space-between} 与主轴的两端对齐,且项目之间的间隔都相等
+    @property {space-around} 项目之间的间隔相等(项目与容器边框的距离为1,项目与项目之间的距离为2)
+    */
+    align-items: flex-start | flex-end | center | baseline | stretch;
+    /*  
+    align-items属性定义项目在交叉轴上的对齐方式
+    @property {flex-start} 与交叉轴的起点对齐
+    @property {flex-end} 与交叉轴的终点对齐
+    @property {center} 在交叉轴上居中对齐
+    @property {baseline} 项目的第一行文字的基线对齐
+    @property {stretch} 如果项目未设置高度或设为auto,将占满整个容器的高度
     */
 }
 ```
