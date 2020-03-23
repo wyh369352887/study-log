@@ -2587,6 +2587,16 @@ https://example.org/api/
 
 3. promise.race:用法同promise.all一样,不同的是只要有一个promise的状态改变了,新实例的状态都会随之改变(不论fulfilled或rejected)
 
+### 普通函数和箭头函数的区别
+
+1. 普通函数的`this`指向调用它的对象(无则为`window`);箭头函数没有自己的`this`,所以它的`this`指向定义它时的环境上下文。
+
+2. 普通函数可以是署名函数可以是匿名函数,箭头函数全都是匿名函数
+
+3. 普通函数可以用于构造函数(`new`关键字),箭头函数不能用于构造函数
+
+4. 普通函数内部有`arguments`对象,箭头函数没有
+
 ### flex布局
 ---
 ##### 启用flex布局
@@ -2639,7 +2649,7 @@ https://example.org/api/
     justify-content:flex-start | flex-end | center | space-between | space-around;
     /*  
     justyify-content属性定义了项目在主轴上的对齐方式
-    @property {flex-start} 与主轴的起点对齐
+    @property {flex-start} 与主轴的起点对齐(默认)
     @property {flex-end} 与主轴的终点对齐
     @property {center} 在主轴上居中对齐
     @property {space-between} 与主轴的两端对齐,且项目之间的间隔都相等
@@ -2652,7 +2662,44 @@ https://example.org/api/
     @property {flex-end} 与交叉轴的终点对齐
     @property {center} 在交叉轴上居中对齐
     @property {baseline} 项目的第一行文字的基线对齐
-    @property {stretch} 如果项目未设置高度或设为auto,将占满整个容器的高度
+    @property {stretch} 如果项目未设置高度或设为auto,将占满整个容器的高度(默认)
+    */
+    align-content: flex-start | flex-end | center | space-between | space-around | stretch;
+    /*  
+    align-content属性定义有多根轴线时,轴线之间的对齐方式。只有一根轴线时无效。
+    @property {flex-start} 与交叉轴的起点对齐
+    @property {flex-end} 与交叉轴的终点对齐
+    @property {center} 在交叉轴上居中对齐
+    @property {space-between} 与交叉轴两段对齐
+    @property {space-around} 每两根轴线之间距离相等(与容器边框的距离为1,轴线之间的距离为2)
+    @property {stretch} 轴线占满整个交叉轴(默认)
+    */
+}
+```
+
+##### 项目的属性
+
+```css
+.item{
+    order: <Number>;
+    /*  
+    order属性定义了项目的排列顺序,值越小,排列越靠前,默认为0
+    */
+    flex-grow: <Number>;
+    /*  
+    定义项目的放大比例,如果为0,即使存在剩余空间项目也不放大。一旦有一个项目的flex-grow值不为0,则容器内就不会有剩余空间
+    */
+    flex-shrink: <Number>;
+    /*  
+    定义项目的缩小比例,默认为1,即容器空间不足,该项目将缩小。该属性值为0的元素不会缩小。该属性的值越大,缩小的比例越大
+    */
+    flex-basis: <length>;
+    /*  
+    定义在分配多余空间之前,该项目所占据的主轴空间。默认值为auto,即项目本来的大小。如果没有剩余空间,该属性无效
+    */
+    align-self: auto | flex-start | flex-end | center | baseline | stretch;
+    /*  
+    定义项目可以有与其他项目不一样的对齐方式,并覆盖容器的align-items属性,默认值为auto,表示继承父元素的align-items属性,如果没有父元素,则等同于stretch,其他属性与容器元素的align-items属性值相同
     */
 }
 ```
