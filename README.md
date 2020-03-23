@@ -2621,18 +2621,18 @@ https://example.org/api/
 .box{
     flex-direction: row | row-reverse | column | column-reverse;
     /*
-    *flex-direction属性决定主轴的方向
-    *@property {row} 主轴为水平方向,从左到右(默认)
-    *@property {row-reverse} 主轴为水平方向,从右到左
-    *@property {column} 主轴为垂直方向,从上到下
-    *@property {column-reverse} 主轴为垂直方向,从下到上
+    flex-direction属性决定主轴的方向
+    @property {row} 主轴为水平方向,从左到右(默认)
+    @property {row-reverse} 主轴为水平方向,从右到左
+    @property {column} 主轴为垂直方向,从上到下
+    @property {column-reverse} 主轴为垂直方向,从下到上
     */
     flex-wrap: nowrap | wrap | wrap-reverse;
     /* 
     flex-wrap属性定义如果项目在一条轴线上排不下,如何换行
-    nowrap:不换行,全部排在一行(默认)
-    wrap:换行,第一行在上方
-    wrap-reverse:第一行在下方
+    @property {nowrap} 不换行,全部排在一行(默认)
+    @property {wrap} 换行,第一行在上方
+    @property {wrap-reverse} 第一行在下方
     */
     flex-flow: <flex-direction> | <flex-wrap>;
     /* 
