@@ -2587,6 +2587,53 @@ https://example.org/api/
 
 3. promise.race:用法同promise.all一样,不同的是只要有一个promise的状态改变了,新实例的状态都会随之改变(不论fulfilled或rejected)
 
+### flex布局
+---
+##### 启用flex布局
+块级元素使用flex布局
+```css
+.box{
+    display:flex;
+}
+```
+行内元素使用flex布局
+```css
+.box{
+    display:inline-flex;
+}
+```
+-webkit-内核的浏览器,必须加上`-webkit-`前缀
+```css
+.box{
+    display:-webkit-flex;
+    display:flex;
+}
+```
+
+##### 一些基本概念
+采用flex布局的元素称为"容器",它的所有子元素称为"项目"。
+容器默认存在两根轴:水平的主轴`main axis`,和垂直的交叉轴`cross axis`。主轴的开始位置叫做`main start`,结束位置叫做`main end`;交叉轴的开始位置叫做`cross start`,结束位置叫做`cross end`。
+单个项目占据的主轴空间叫做`main size`,占据的交叉轴空间叫做`cross size`。
+
+##### 容器的属性
+
+```css
+.box{
+    flex-direction: row | row-reverse | column | column-reverse;
+    /*
+    row:主轴为水平方向,从左到右(默认)
+    row-reverse:主轴为水平方向,从右到左
+    column:主轴为垂直方向,从上到下
+    column-reverse:主轴为垂直方向,从下到上
+     */
+     flex-wrap: nowrap | wrap | wrap-reverse;
+     /* 
+     nowrap:不换行,全部排在一行
+     wrap:换行,第一行在上方
+     wrap-reverse:第一行在下方
+      */
+}
+```
 
 ## Vue相关
 
