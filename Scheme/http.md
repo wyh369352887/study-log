@@ -51,9 +51,47 @@ HTTP请求都是由状态行、请求/响应头、消息主体三部分组成,�
 ### 1xx
 
 `100(Continue)`:继续,客户端应继续其请求
+
 `101(Switching Protocols)`:切换协议
 
 ### 2xx
 
 `200(OK)`:请求成功,一般用于GET和POST请求
-`204(No Content)`:请求成功,但未返回内容,响应体没有body部分
+
+`204(No Content)`:请求成功,且不需要返回任何实体信息,响应体没有body部分
+
+`206(Partial Content)`:服务器成功处理了部分GET请求
+
+### 3xx
+
+`301(Moved Permanently)`:请求的资源已被永久移动到新的URI,与302对应
+
+`302(Found)`:请求的资源被临时移动,与301对应
+
+`304(Not Modified)`:资源未修改,服务端返回此状态码时不会返回数据
+
+### 4xx
+
+`400(Bad Request)`:客户端请求语法错误或参数有误
+
+`403(Forbidden)`:请求没有错误,但服务器拒绝执行
+
+`404(Not Found)`:资源未找到
+
+`408(Request Time-out)`:服务器等待客户端发送的请求时间超时
+
+`409(Conflict)`:多个请求发生了冲突(常见于PUT方法)
+
+`413(Request Entity Too Large)`:请求体的数据过多,服务器拒绝请求
+
+`414(Request-URI Too Large	)`:请求的URI过长,服务器无法处理
+
+### 5xx
+
+`500(Internal Server Error	)`:服务器内部错误,无法完成请求
+
+`501(Not Implemented)`:服务器不支持请求的功能,无法完成请求
+
+`502(Bad Gateway)`:充当网关或代理的服务器，从远端服务器接收到了一个无效的请求
+
+`503(Service Unavailable)`:服务器超载或系统维护,暂时无法处理客户端的请求
