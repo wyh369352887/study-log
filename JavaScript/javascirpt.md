@@ -1,5 +1,3 @@
-## 面试整理
-
 ### 事件委托
 ---
 
@@ -13,6 +11,7 @@
 `__proto__`和`constructor`属性是对象独有的,`prototype`属性是函数独有的,又因为函数也是一种对象,所以函数也拥有`__proto`和`constructor`属性
 
 从一个实例访问某属性:
+
 ```javascript
 var foo = {},
     F = function(){};
@@ -27,7 +26,8 @@ F.b   //'value b'
 
 foo.a ==> foo.__proto__.a ==> Object.prototype.a  // 'value a'
 foo.b ==> foo.__proto__.b ==> Object.prototype.b  // undefined
-F.a ==> F.__proto__.a ==> Function.prototype.a ==> Function.prototype.__proto__.a(*此时把Function.prototype视作一个普通对象) ==> Object.prototype.a // 'value a'
+F.a ==> F.__proto__.a ==> Function.prototype.a ==> Function.prototype.__proto__.a ==> Object.prototype.a 
+// 'value a',(*此时把Function.prototype视作一个普通对象)
 F.b ==> F.__proto__.b ==> Function.prototype.b // 'value b'
 ```
 
