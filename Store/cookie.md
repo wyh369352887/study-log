@@ -32,9 +32,9 @@
 
 ### 缺陷
 
-1.容量缺陷:cookie的体积上限只有4kb
+1.容量缺陷：cookie的体积上限只有4kb
 
-2.性能缺陷:cookie紧跟域名,不管域名下面的某一个地址需不需要这个cookie,请求都会携带完整的cookie。但可以通过`domain`和`path`指定作用域来解决。
+2.性能缺陷：cookie紧跟域名,不管域名下面的某一个地址需不需要这个cookie,请求都会携带完整的cookie。但可以通过`domain`和`path`指定作用域来解决。
 
-3.安全缺陷:cookie纯文本的形式很容易被非法用户截获、篡改。可以设置`HttpOnly`为`true`来拒绝JS脚本读取cookie
+3.安全缺陷：cookie纯文本的形式很容易被非法用户截获、篡改。可以设置`HttpOnly`为`true`来拒绝JS脚本读取cookie
 
