@@ -64,6 +64,7 @@ obj instanceof Object //true
 ![loop](https://user-gold-cdn.xitu.io/2017/11/21/15fdcea13361a1ec?imageView2/0/w/1280/h/960/format/webp/ignore-error/1 "流程图")
 
 ### 普通函数和箭头函数的区别
+---
 
 1. 普通函数的`this`指向调用它的对象(无则为`window`);箭头函数没有自己的`this`,所以它的`this`指向定义它时的环境上下文。
 
@@ -72,3 +73,9 @@ obj instanceof Object //true
 3. 普通函数可以用于构造函数(`new`关键字),箭头函数不能用于构造函数
 
 4. 普通函数内部有`arguments`对象,箭头函数没有
+
+### for...in和for...of
+---
+`for...in`:可以枚举普通对象,可以枚举数组,返回对象(数组)的键名(元素下标),但是无法过滤掉原型上的属性或者数组的非元素属性(借助`hasOwnProperty()`可以过滤掉原型上的属性)
+
+`for...of`:可以迭代所有设置了迭代器`[Symbol.iterator]`的数据结构(对于手动设置了`[Symbol.iterator]`的普通对象也可以迭代)
