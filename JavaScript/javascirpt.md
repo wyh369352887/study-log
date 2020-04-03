@@ -82,8 +82,13 @@ obj instanceof Object //true
 
 ### 深拷贝与浅拷贝
 ---
+
+>本节参考
+>https://juejin.im/post/5d6aa4f96fb9a06b112ad5b1
+>https://juejin.im/post/59ac1c4ef265da248e75892b
+
 #### 堆和栈的区别:
-栈:自动分配的内存空间,它由系统自动释放
+栈:自动分配的内存空间,它由系统自动释放
 堆:动态分配的内容,大小不定也不会自动释放
 
 #### 基本数据类型和引用数据类型
@@ -93,8 +98,6 @@ obj instanceof Object //true
 引用数据类型(`object`)是存放在堆内存中的,变量实际上是一个存放在栈内存中的指针,指向堆内存中实际的地址。每个空间大小不一样,要根据情况进行特定的分配。引用数据类型的值是可以改变的。
 
 #### 赋值与浅拷贝
-
->本小节参考:https://juejin.im/post/5d6aa4f96fb9a06b112ad5b1
 
 ```javascript
 let obj = {
