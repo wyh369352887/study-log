@@ -84,11 +84,14 @@ obj instanceof Object //true
 ---
 
 >本节参考
+
 >https://juejin.im/post/5d6aa4f96fb9a06b112ad5b1
+
 >https://juejin.im/post/59ac1c4ef265da248e75892b
 
 #### 堆和栈的区别:
 栈:自动分配的内存空间,它由系统自动释放
+
 堆:动态分配的内容,大小不定也不会自动释放
 
 #### 基本数据类型和引用数据类型
