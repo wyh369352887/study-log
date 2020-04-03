@@ -79,3 +79,115 @@ obj instanceof Object //true
 `for...in`:可以枚举普通对象,可以枚举数组,返回对象(数组)的键名(元素下标),但是无法过滤掉原型上的属性或者数组的非元素属性(借助`hasOwnProperty()`可以过滤掉原型上的属性)
 
 `for...of`:可以迭代所有设置了迭代器`[Symbol.iterator]`的数据结构(对于手动设置了`[Symbol.iterator]`的普通对象也可以迭代)
+
+### 深拷贝与浅拷贝
+---
+#### 堆和栈的区别:
+栈:自动分配的内存空间,它由系统自动释放
+堆:动态分配的内容,大小不定也不会自动释放
+
+#### 基本数据类型和引用数据类型
+基本数据类型主要是:`undefined,null,boolean,string,number`
+基本数据类型存放在栈中,且值不可变,动态修改了基本数据类型的值,它的原始值不会改变,而是返回了一个新的基本数据类型。
+
+引用数据类型(`object`)是存放在堆内存中的,变量实际上是一个存放在栈内存中的指针,指向堆内存中实际的地址。每个空间大小不一样,要根据情况进行特定的分配。引用数据类型的值是可以改变的。
+
+#### 赋值与浅拷贝
+
+>本小节参考:https://juejin.im/post/5d6aa4f96fb9a06b112ad5b1
+
+```javascript
+let obj = {
+    name:'foo',
+    age:20,
+    family:{
+        dad:'bar',
+        mom:'baz'
+    }
+}
+let obj2 = obj;
+let obj3 = shallowCopy(obj);
+function shallowCopy(source){
+    let target = {};
+    for(let prop in source){
+        if(source.hasOwnProperty(prop)){
+            target[prop] = source[prop];
+        }
+    }
+    return target
+}
+obj.age = 18;
+obj.family.dad = 'woo';
+console.log(obj)//{ name: 'foo', age: 18, family: { dad: 'woo', mom: 'baz' } }
+console.log(obj2)//{ name: 'foo', age: 18, family: { dad: 'woo', mom: 'baz' } }
+console.log(obj3)//{ name: 'foo', age: 20, family: { dad: 'woo', mom: 'baz' } }
+```
+对于赋值来说,源对象实际上与赋值得来的新对象都指向堆内存中的同一个对象,所以改变任何属性都会彼此影响
+对于浅拷贝来说,借助了基本数据类型的特性,对源对象第一层的数据进行枚举并手动赋值,如果该数据是基本数据类型,那么修改时不会彼此影响;如果该数据是引用数据类型,那么在修改时还是会彼此影响,此时需借助深拷贝来切断这种联系。
+
+#### 浅拷贝与深拷贝
+在不考虑其他情况的前提下,最简单粗暴的一个深拷贝方法:
+```javascript
+JSON.parse(JSON.stringify())
+```
+缺点是无法拷贝函数以及其他的引用数据类型,无法拷贝`undefined`,无法解决循环引用的问题
+
+那么就必须在浅拷贝的思路上进行改进:
+```javascript
+function deepCopy(source){
+    if(typeof source === 'object'){
+        let target = {};
+        for(let prop in source){
+            if(source.hasOwnProperty(prop)){
+                //递归直到属性为基本数据类型
+                target[parop] = deepCopy(source[prop]);
+            }
+        }
+        return target
+    }else{
+        return source
+    }
+}
+```
+
+但是js中并不是只有`object`一种引用数据类型,另外的比如还有`array`
+
+```javascript
+function deepCopy(source){
+    if(typeof source === 'object'){
+        let target = Array.isArray(source) ? [] : {};
+        for(let prop in source){
+            if(source.hasOwnProperty(prop)){
+                target[parop] = deepCopy(source[prop]);
+            }
+        }
+        return target
+    }else{
+        return source
+    }
+}
+```
+
+接着再解决一个`JSON.parse(JSON.stringify())`无法处理的循环引用问题
+
+```javascript
+function deepCopy(source,map = new Map()){
+    if(typeof source === 'object'){
+        let target = Array.isArray(source) ? [] : {};
+        if(map.get(source)){
+            return map.get(source)
+        }
+        map.set(source,target);
+        for(let prop in source){
+            if(source.hasOwnProperty(prop)){
+                target[parop] = deepCopy(source[prop]);
+            }
+        }
+        return target
+    }else{
+        return source
+    }
+}
+```
+
+到这里只考虑了`object`和`array`两种最为常用的引用数据类型,当然还有其他的引用数据类型(`function`,`null`),以及可遍历的数据结构(`map`,`set`),不可遍历的类型(`boolean`,`number`,`string`,`date`,`error`)等等,这时候可以借助`Object.prototype.toString()`去精准识别数据类型,再对其进行进一步的操作处理。
