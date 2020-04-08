@@ -1,20 +1,21 @@
 ### 字符串匹配——暴力匹配
 ```javascript
-function bruteForce(str, mode) {
-    let str_len = str.length,
-        mode_len = mode.length,
+function bruteForce(source, pattern) {
+    let source_len = source.length,
+        pattern_len = pattern.length,
         result = [];
-    for (let i = 0; i < str_len; i++) {
+    for (let i = 0; i < source_len; i++) {
         let index = 0;
         while (
-            (str.charCodeAt(i + index) === mode.charCodeAt(index)) && (str_len - i > mode_len)
+            (source.charCodeAt(i + index) === pattern.charCodeAt(index)) && (source_len - i > pattern_len)
         ) {
             index++;
-            if (index === mode_len) result.push(i);
+            if (index === pattern_len) result.push(i);
         }
     }
     return result.length === 0 ? -1 : result
 }
+
 ```
 
 ### 字符串匹配-kmp算法之部分匹配表解法
@@ -38,18 +39,18 @@ function getPartMatch(str) {
     return result
 }
 //kmp
-function kmpPartMatch(str, mode) {
-    let partMatch = getPartMatch(mode),
-        str_len = str.length,
-        mode_len = mode.length,
+function kmpPartMatch(source, pattern) {
+    let partMatch = getPartMatch(pattern),
+        source_len = source.length,
+        pattern_len = pattern.length,
         result = [];
-    for (let i = 0; i < str_len - mode_len; i++) {
+    for (let i = 0; i < source_len - pattern_len; i++) {
         let index = 0;
         while (
-            (str.charCodeAt(i + index) === mode.charCodeAt(index)) && (str_len - i > mode_len)
+            (source.charCodeAt(i + index) === pattern.charCodeAt(index)) && (source_len - i > pattern_len)
         ) {
-            index++;
-            if (index === mode_len) result.push(i);
+            index++;//游标后移
+            if (index === pattern_len) result.push(i);
         }
         if (index > 0) {
             let step = index - partMatch[index - 1] - 1;
@@ -58,4 +59,5 @@ function kmpPartMatch(str, mode) {
     }
     return result.length === 0 ? -1 : result
 }
+
 ```
