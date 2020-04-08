@@ -18,6 +18,7 @@ function bruteForce(str, mode) {
 ```
 
 ### 字符串匹配-kmp算法之部分匹配表解法
+解析见[我的博客](https://blog.csdn.net/Elephant_H/article/details/105393667)
 ```javascript
 //获取部分匹配表
 function getPartMatch(str) {
