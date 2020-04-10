@@ -73,7 +73,7 @@ var app = new Vue({
 
 ### vue数据双向绑定的原理
 
-核心原理是使用`Object.defineProperty()`劫持数据,并添加访问器属性,使data变成可监测对象。
+核心原理是使用`Object.defineProperty()`劫持数据,并添加访问器属性,使data变成可监测对象。由于Vue执行一个组件的render函数是由`watcher`去代理执行的,`watcher`在执行前会把自身赋值给一个全局变量`Dep.target`,等到某个组件执行`render`函数时访问到响应式属性,触发`getter`,就会将全局变量`Dep.target`保存的`watcher`收集起来作为自身的依赖。这样当响应式属性更新时通知`watcher`去重新调用对应组件的`render`函数触发视图更新。
 
 `view层`=>`model层`的改变,由于是简单的一对一关系,通过事件监听即可实现;而`model层`=>`view层`的改变,可能涉及到一对多的情况,则使用了`订阅/发布模式`,在编译模板时,为所有使用了数据的模板元素创建一个`watcher`实例,并将该`watcher`添加到对应的`data`属性的订阅列表中,当某个`data`属性发生改变时,通知到对应的`watcher`实例,再由`watcher`实例对具体的模板元素进行更新。
 
