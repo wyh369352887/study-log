@@ -93,15 +93,15 @@ body.firefox a {
 
 ### 变量$
 ```css
-//定义变量
+/* 定义变量 */
 $width:5px;
 
-//使用变量
+/* 使用变量 */
 #main{
     width:$width;
 }
 
-//局部变量
+/* 局部变量 */
 #main{
     $width:5px;
     .content{
@@ -109,7 +109,7 @@ $width:5px;
     }
 }
 
-//可使用'!global'将局部变量提升为全局变量
+/* 可使用'!global'将局部变量提升为全局变量 */
 #main{
     $width:5px !global;
 }
@@ -134,7 +134,7 @@ p.foo {
 ```
 
 ```css
-//避免运算表达式
+/* 避免运算表达式 */
 p {
   $font-size: 12px;
   $line-height: 30px;
@@ -154,9 +154,9 @@ p {
 
 ```css
 $content: "First content";
-$content: "Second content?" !default;//不生效
-$new_content: null;//null视为未赋值
-$new_content: "First time reference" !default;//生效
+$content: "Second content?" !default;/* 不生效 */
+$new_content: null;/* null视为未赋值 */
+$new_content: "First time reference" !default;/* 生效 */
 ```
 
 ### 继承 @extend
@@ -193,7 +193,7 @@ $new_content: "First time reference" !default;//生效
 ### 自定义混合指令 @mixin
 
 ```css
-//声明
+/* 声明 */
 @mixin large-text {
     font: {
         family: Arial;
@@ -203,7 +203,7 @@ $new_content: "First time reference" !default;//生效
     color: #ff0000;
 }
 
-//引用
+/* 引用 */
 .page-title {
   @include large-text;
   padding: 4px;
