@@ -137,7 +137,7 @@ new了一个Vue,主要逻辑为:合并逻辑,将用户传入的配置与类本�
 + `.right`：应用于鼠标事件，右键触发
 + `.middle`：应用于鼠标事件，中键触发
 + `.keyCode`：应用于键盘事件`(keydown,keyup,keypress)`并不直接使用`.keyCode`进行修饰，而是使用具体的键值别名。vue预设的别名有`.enter .tab .delete .space .esc .up .down .left .right`，和系统按键别名`.ctrl .alt .meta .shift`。也可以通过全局`Vue.config.keyCodes.xx = xxx`自定义别名
-+ `.exact`：对于绑定的系统按键触发事件，当组合按下包含指定按键在内的多个系统按键时也会触发，`.exact`修饰符规定当且仅当按下指定按键时触发
++ `.exact`：对于绑定的系统按键触发事件，当组合按下包含指定按键在内的多个系统按键时也会触发，`.exact`修饰符规定当且仅当按下指定按键时触发
 + `.sync`：父子组件间类似于`v-model`的语法糖，在子组件中`$emit('update:xxx',someValue)`，在父组件中`<child-component :xxx.sync="otherValue" />`
 + `.prop`：指定绑定的值不被组件解析为`props`，而是dom的属性绑定在元素上
 + `.camel`：强制被绑定的属性渲染为驼峰命名的形式
