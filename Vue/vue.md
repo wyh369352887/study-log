@@ -118,3 +118,26 @@ new了一个Vue,主要逻辑为:合并逻辑,将用户传入的配置与类本�
 ### vue.$nextTick()属于宏任务还是微任务？
 
 在vue的运行环境支持Promise时，$nextTick()会优先使用Promise。否则会被定义为宏任务。
+
+---
+
+### vue中的修饰符
+
++ `.lazy`：表单的更新动作由oninput事件触发改为onChange事件触发
++ `.trim`：过滤表单元素输入值的首尾空格，不过滤中间空格
++ `.number`：表单元素如果第一个输入的值是数字，则将后续输入值的非数字内容过滤掉；如果第一个输入的不是数字，则无效果。
++ `.stop`：阻止事件冒泡，等同于`event.stopPropagation()`
++ `.prevent`：阻止事件的默认行为，等同于`event.preventDefault()`
++ `.self`：只有当事件是在绑定事件的元素上触发时才执行。等同于`event.target === event.currentTarget`时触发。
++ `.once`：绑定的事件只触发一次
++ `.capture`：将事件机制从默认的冒泡改为捕获
++ `.passive`：对应`addEventListener`的第三个参数`{passive:false}`
++ `.native`：应用于组件，将事件转化为原生事件
++ `.left`：应用于鼠标事件，左键触发
++ `.right`：应用于鼠标事件，右键触发
++ `.middle`：应用于鼠标事件，中键触发
++ `.keyCode`：应用于键盘事件`(keydown,keyup,keypress)`并不直接使用`.keyCode`进行修饰，而是使用具体的键值别名。vue预设的别名有`.enter .tab .delete .space .esc .up .down .left .right`，和系统按键别名`.ctrl .alt .meta .shift`。也可以通过全局`Vue.config.keyCodes.xx = xxx`自定义别名
++ `.exact`：对于绑定的系统按键触发事件，当组合按下包含指定按键在内的多个系统按键时也会触发，`.exact`修饰符规定当且仅当按下指定按键时触发
++ `.sync`：父子组件间类似于`v-model`的语法糖，在子组件中`$emit('update:xxx',someValue)`，在父组件中`<child-component :xxx.sync="otherValue" />`
++ `.prop`：指定绑定的值不被组件解析为`props`，而是dom的属性绑定在元素上
++ `.camel`：强制被绑定的属性渲染为驼峰命名的形式
