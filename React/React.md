@@ -1,7 +1,9 @@
->本文档为 vue 转 react 的入坑笔记，着重记录两者的异同
+> 本文档为 vue 转 react 的入坑笔记，着重记录两者的异同
 
 ### JSX 语法
-在jsx中嵌入表达式
+
+在 jsx 中嵌入表达式
+
 ```js
 /**
  * 在jsx中可以在大括号内放置任意有效的javascript表达式，例如：
@@ -21,18 +23,20 @@ const user = {
 const element = <h1>Hello, {formatName(user)}!</h1>;
 ```
 
-jsx也是一个表达式，可以在`if/else`代码块中使用，可以将jsx赋值给变量，把jsx当做参数传给函数，以及从函数中返回jsx
+jsx 也是一个表达式，可以在`if/else`代码块中使用，可以将 jsx 赋值给变量，把 jsx 当做参数传给函数，以及从函数中返回 jsx
+
 ```js
-function getGreeting(user){
-    if(user){
-        return <h1>Hello,{formatName(user)}</h1>
-    }else{
-        return <h1>Hello,Stranger</h1>
-    }
+function getGreeting(user) {
+  if (user) {
+    return <h1>Hello,{formatName(user)}</h1>;
+  } else {
+    return <h1>Hello,Stranger</h1>;
+  }
 }
 ```
 
-jsx特定属性
+jsx 特定属性
+
 ```js
 //使用引号将属性值指定为字符串字面量
 const element = <div tabIndex="0"></div>;
@@ -43,7 +47,8 @@ const element = <img src={user.avatarUrl}></img>;
 //###注意，不能同时使用引号和大括号
 ```
 
-使用jsx指定子元素
+使用 jsx 指定子元素
+
 ```js
 //自闭和标签
 const element = <img src={user.avatarUrl} />;
@@ -61,9 +66,9 @@ const element = (
 
 ### 元素渲染
 
-React元素是不可变对象，一旦被创建，你就无法改变它的子元素或者属性。
+React 元素是不可变对象，一旦被创建，你就无法改变它的子元素或者属性。
 
-根据我们已有的知识，更新UI的唯一方式是创建一个全新的元素，并将其传入`ReactDOM.render()`
+根据我们已有的知识，更新 UI 的唯一方式是创建一个全新的元素，并将其传入`ReactDOM.render()`
 
 ```js
 //一个计时器的例子
@@ -74,10 +79,247 @@ function tick() {
       <h2>It is {new Date().toLocaleTimeString()}.</h2>
     </div>
   );
-  ReactDOM.render(element, document.getElementById('root'));
+  ReactDOM.render(element, document.getElementById("root"));
 }
 
 setInterval(tick, 1000);
 ```
 
 在实践中，大多数 React 应用只会调用一次 ReactDOM.render()，我们通常将这些代码封装到有状态组件中实现这种功能。
+
+---
+
+### 组件&props
+
+函数组件：
+
+```js
+function Welcome(props){
+  return <h1><Hello,{this.props.name}/hi>
+}
+```
+
+class 组件：
+
+```js
+class Welcome extends React.Component {
+  render() {
+    return <h1>Hello,{this.props.name}</h1>;
+  }
+}
+```
+
+props 的只读性：
+
+```js
+//纯函数：不会更改入参，多次调用相同的入参始终返回相同的结果
+function sum(a, b) {
+  return a + b;
+}
+
+//非纯函数：修改了入参
+function withdrad(account, amount) {
+  account.total += amount;
+}
+```
+
+---
+
+### State&声明周期
+
+```js
+componentDidMount(); //组件已经被渲染到DOM中后执行
+
+componentWillUnmount(); //组件将要被删除的时候执行
+```
+
+不要直接修改 State，应该使用`setState()`
+
+```js
+this.state.comment = "Hello"; //won't work
+
+this.setState({ comment: "Hello" }); //work
+
+//构造函数是唯一可以给this.state赋值的地方
+```
+
+state 的更新可能是异步的，因为 React 可能会把多个`setState()`合并成一个
+
+```js
+//sometimes this won't work
+this.setState({
+  counter: this.state.counter + this.props.increment,
+});
+
+//always work
+this.setState((state, props) => ({
+  counter: state.counter + props.increment,
+}));
+```
+
+state 是单向数据流，该 state 中的数据只能影响低于它的组件
+
+```js
+//把state作为props传递到它的子组件
+<h2>It is {this.state.toLocalTimestring()}.</h2>
+//同样适用于自定义组件
+<FormattedData date={this.state.date} />
+```
+
+### 事件处理
+
+jsx 与传统 HTML 语法上的差异
+
+```js
+//传统HTML
+<button onclick="handler()"></button>
+
+//jsx，小驼峰命名
+<button onClick={handler}></button>
+
+//另外不能通过return false来阻止默认行为，必须显式调用preventDefault()
+```
+
+class 组件中默认不会绑定`this`，绑定`this`的方法有如下几种：
+
+```js
+//一、在constructor中为方法绑定
+class Toggle extends React.component {
+  constructor(props){
+    super(props)
+    this.state = {isToggleOn:true}
+    this.handleClick = this.handleClick.bind(this)
+  }
+  handleClick(){
+    ...
+  }
+  render(){
+    ...
+  }
+}
+
+//二、实验性的public class fileds语法
+class Toggle extends React.component {
+  constructor(props){
+    ...
+  }
+  handleClick = () => {
+    //'this' key is work here
+  }
+}
+
+//三、绑定时使用回调函数
+class Toggle extends React.component{
+  constructor(props){
+    ...
+  }
+  handleClick(){
+    //'this' key is work here
+  }
+  render(){
+    return (
+      <button onClick={() => this.handlerClick()}>click me</button>
+    )
+  }
+}
+```
+
+向事件处理程序传递参数
+
+```js
+//箭头函数方式
+<button onClick={(e) => this.handler(id,e)}>click me</button>
+
+//bind方式
+<button onClick={this.handler.bind(this,id)}>click me</button>
+```
+
+### 条件渲染
+
+使用`if/else`：
+
+```js
+function greeting(props) {
+  const isLogin = props.isLogin;
+  if (isLogin) {
+    return <UserGreeting />;
+  }
+  return <GuestGreeting />;
+}
+```
+
+与运算符`&&`：
+
+```js
+//在js中，true && expression 总是返回 expression，false && expression总是返回false
+function MailBox(props) {
+  const messages = props.messages;
+  return (
+    <div>
+      <h1>Hello!</h1>
+      {messages.length && (
+        <h1>You Have {this.props.messages.length} unread messages</h2>
+      )}
+    </div>
+  );
+}
+```
+
+三目运算符：
+
+```js
+render(){
+  const isLogin = this.state.isLogin;
+  return (
+    <div>
+      {
+        isLogin ? <LogoutButton /> : <LoginButton />
+      }
+    </div>
+  )
+}
+```
+
+阻止条件渲染：
+
+```js
+//在组件的render函数中return null
+function WarningBanner(props) {
+  if (!props.warn) {
+    return null;
+  }
+
+  return (
+    //won't reach here
+    <div className="warning">Warning!</div>
+  );
+}
+//* 在组建的render方法中返回null并不会影响组件的生命周期。
+//* 上例中组件的componentsDidUpdate依然会被调用
+```
+
+### 列表 & Key
+
+可以使用 map()将数组映射为一个组件数组：
+
+```js
+function NumberList(props) {
+  const numbers = props.numbers;
+  const listItems = numbers.map((item) => {
+    <li key={item.toString()}>{item}</li>;
+  });
+  return (
+    <ul>
+      {listItem}
+    </ul>
+  )
+}
+
+const numbers = [1, 2, 3, 4, 5, 6];
+
+ReactDOM.render(
+  <NumberList numbers={numbers} />,
+  document.getElementById('root')
+)
+//大部分情况下，key值设置在map()方法中的元素上
+```
