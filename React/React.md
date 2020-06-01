@@ -323,3 +323,66 @@ ReactDOM.render(
 )
 //大部分情况下，key值设置在map()方法中的元素上
 ```
+
+### 表单
+
+受控组件：
+```js
+//由于在表单元素上设置了value属性，因此显示的值始终为this.state.value，这使得state成为唯一数据源
+//对于受控组件来说，输入的值始终由React的state驱动
+class NameForm extends React.Component{
+  constructor(props){
+    super(props)
+    this.state = {value:''}
+  }
+
+  handleChange(event){
+    this.setState({value:event.target.vale})
+  }
+
+  handleSubmit(event){
+    alert('name is:' + this.state.value);
+    event.preventDefault();
+  }
+
+  render(){
+    return (
+      <form onSubmit={() => this.handleSubmit()}>
+        <label>
+          名字：
+          <input type="text" value={this.state.value} onChange={() => this.handleChange()} />
+        </label>
+        <input type="submit" value="提交" />
+      </form>
+    )
+  }
+}
+```
+
+### 组合
+
+```js
+function SplitPane(props){
+  return (
+    <div className="SplitPane">
+      <div className="SplitPane-left">
+        {props.left}
+      </div>
+      <div className="SplitPane-right">
+        {props.right}
+      </div>
+    </div>
+  )
+}
+
+function App(props){
+  return (
+    <SplitPane
+      left={<Contacts />}
+      right={<Chat />}
+    />
+  )
+}
+
+//类似slot的概念，但是React没有slot的限制，任何东西都可以通过props传递
+```
