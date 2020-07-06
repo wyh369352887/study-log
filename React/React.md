@@ -308,53 +308,54 @@ function NumberList(props) {
   const listItems = numbers.map((item) => {
     <li key={item.toString()}>{item}</li>;
   });
-  return (
-    <ul>
-      {listItem}
-    </ul>
-  )
+  return <ul>{listItem}</ul>;
 }
 
 const numbers = [1, 2, 3, 4, 5, 6];
 
 ReactDOM.render(
   <NumberList numbers={numbers} />,
-  document.getElementById('root')
-)
+  document.getElementById("root")
+);
 //大部分情况下，key值设置在map()方法中的元素上
 ```
 
 ### 表单
 
 受控组件：
+
 ```js
 //由于在表单元素上设置了value属性，因此显示的值始终为this.state.value，这使得state成为唯一数据源
 //对于受控组件来说，输入的值始终由React的state驱动
-class NameForm extends React.Component{
-  constructor(props){
-    super(props)
-    this.state = {value:''}
+class NameForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { value: "" };
   }
 
-  handleChange(event){
-    this.setState({value:event.target.vale})
+  handleChange(event) {
+    this.setState({ value: event.target.vale });
   }
 
-  handleSubmit(event){
-    alert('name is:' + this.state.value);
+  handleSubmit(event) {
+    alert("name is:" + this.state.value);
     event.preventDefault();
   }
 
-  render(){
+  render() {
     return (
       <form onSubmit={() => this.handleSubmit()}>
         <label>
           名字：
-          <input type="text" value={this.state.value} onChange={() => this.handleChange()} />
+          <input
+            type="text"
+            value={this.state.value}
+            onChange={() => this.handleChange()}
+          />
         </label>
         <input type="submit" value="提交" />
       </form>
-    )
+    );
   }
 }
 ```
@@ -362,27 +363,111 @@ class NameForm extends React.Component{
 ### 组合
 
 ```js
-function SplitPane(props){
+function SplitPane(props) {
   return (
     <div className="SplitPane">
-      <div className="SplitPane-left">
-        {props.left}
-      </div>
-      <div className="SplitPane-right">
-        {props.right}
-      </div>
+      <div className="SplitPane-left">{props.left}</div>
+      <div className="SplitPane-right">{props.right}</div>
     </div>
-  )
+  );
 }
 
-function App(props){
-  return (
-    <SplitPane
-      left={<Contacts />}
-      right={<Chat />}
-    />
-  )
+function App(props) {
+  return <SplitPane left={<Contacts />} right={<Chat />} />;
 }
 
 //类似slot的概念，但是React没有slot的限制，任何东西都可以通过props传递
 ```
+
+### Hook
+
+在不编写 class 的情况下使用 state 以及其他的 React 特性
+
+```javascript
+import React, { useState } from "react";
+function Example() {
+  //声明一个叫count的state变量,初始值为0
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}></button>
+    </div>
+  );
+}
+```
+#### useState
+
+1. 调用`useState`的时候做了什么？
+
+定义了一个`state`变量(`count`)，与`class`里的`this.state`提供完全相同的功能。
+
+2. `useState`需要哪些参数?
+
+唯一的参数是`state`的初始值。可以是数字、字符串、对象等。如果想要存储多个不同的变量，也可多次调用`useState`。
+
+3. `useState`的返回值是什么?
+
+返回值为：当前`state`和更新`state`的函数（也就是为什么使用数组解构赋值写法的原因）。在上面的例子中与`this.state.count`和`this.setState`类似。
+
+#### useEffect
+
+相当于`componentDidMount`和`componentDidUpdate`。可以多次调用，并可以通过返回一个函数来指定如何“清除”操作。
+
+```javascript
+import React, { useState, useEffect } from "react";
+
+function FriendStatus(props) {
+  const [isOnline, setIsOnline] = useState(null);
+
+  function handleStatusChange(status) {
+    setIsOnline(status.isOnline);
+  }
+
+  useEffect(() => {
+    ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange);
+    return () => {
+      ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange);
+    };
+  });
+
+  if (isOnline === null) {
+    return "Loading...";
+  }
+  return isOnline ? "Online" : "Offline";
+}
+```
+
+1. `useEffect`做了什么？
+
+React会保存传递的函数，并且在执行DOM更新之后执行它。
+
+2. 为什么在组件内部调用`useEffect`
+
+可以在`effect`中直接访问`state`变量（`Hook`使用了js的闭包机制），而不需要提供特定的API。
+
+3. `useEffect`会在每次渲染后都执行吗？
+
+是的，在第一次渲染和之后的每次更新都会执行。
+
+4. 如何跳过部分不必要的`useEffect`?
+
+在某些情况下，组件每次渲染后都清理或者执行`effect`会带来不必要的性能开销。可以通过传递一个数组作为`useEffect`的第二个参数，数组中的值为`state`变量，当组件进行重新渲染的时候，`React`会判断数组中的各个`state`值是否改变，当且仅当所有的`state`都没有发生改变时，跳过此次`effect`。另外，可以通过传递一个空数组`[]`的方式，创建永远都不重复执行（只在初始化的时候执行一次）的`effect`。
+
+```javascript
+//...省略额外代码
+useEffect(() => {
+  document.title = `you clicked ${count} times`
+},[count])//仅在count更新时才会更新
+```
+
+#### Hook的限制条件
+
+1. 只在最顶层使用Hook
+
+不要在循环、条件或者嵌套函数中调用Hook。
+
+2. 只在`React`函数中调用Hook
+
+不要再普通的js函数中调用Hook
