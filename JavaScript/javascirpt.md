@@ -1271,3 +1271,23 @@ parseFloat("22.5") = 22.5
 parseFloat("22.5.34") = 22.5
 parseFloat("0908.5") = 908.5
 ```
+
+## `Math.floor()、Math.ceil()、~~`
+
+```javascript
+/* 
+两个按位取反操作符组合起来被一部分人用来当做取整操作
+实际上表现的功能为：省略小数部分
+在数字的符号不同时表现行为也稍有不同
+*/
+
+// number < 0 时，~~与Math.ceil()功能相同，向上取整
+~~-1.3 = -1
+Math.ceil(-1.3) = -1
+Math.floor(-1.3) = -2
+
+// number > 0 时，~~与Math.floor()功能相同，向下取整
+~~1.3 = 1
+Math.floor(1.3) = 1
+Math.ceil(1.3) = 2
+```
