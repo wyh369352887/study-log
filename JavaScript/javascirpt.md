@@ -1272,6 +1272,8 @@ parseFloat("22.5.34") = 22.5
 parseFloat("0908.5") = 908.5
 ```
 
+---
+
 ## `Math.floor()、Math.ceil()、~~`
 
 ```javascript
