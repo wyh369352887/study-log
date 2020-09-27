@@ -1160,3 +1160,114 @@ function deepCopy(source,map = new Map()){
 ```
 
 到这里只考虑了`object`和`array`两种最为常用的引用数据类型,当然还有其他的引用数据类型(`function`,`null`),以及可遍历的数据结构(`map`,`set`),不可遍历的类型(`boolean`,`number`,`string`,`date`,`error`)等等,这时候可以借助`Object.prototype.toString()`去精准识别数据类型,再对其进行进一步的操作处理。
+
+---
+
+# 《Javascript高级程序设计》第四版更新内容
+
+## `0.1 + 0.2 != 0.3`
+
+> 由于转化二进制时的误差，所有采用IEEE 754标准的语言都存在该问题
+
+### 解决方式
+
+```javascript
+// 1.toFixed(),不推荐
+(0.1 + 0.2).toFixed(2) === (0.3).toFixed(2) // true
+
+// 2.乘法分配律结合等式的性质
+0.1 * 1e10 + 0.2 * 1e10 === 0.3 * 1e10 // true
+
+// 3.Number.EPSILON:表示 1 与Number可表示的大于 1 的最小的浮点数之间的差值。当浮点数运算的误差小于这个值，可以视作没有误差
+Math.abs(0.1 + 0.2 - 0.3) < Number.EPSILON
+```
+
+---
+
+## `Number()、parseInt()、parseFloat()`
+
+### Number()函数转换规则:
+
+```javascript
+/*
+Boolean:
+true => 1,false => 0
+*/
+Number(true) = 1
+Number(false) = 0
+
+/*
+Null: null => 0,
+*/
+Number(null) = 0
+
+/*
+Undefined: undefined => NaN
+*/
+Number(undefined) = NaN
+
+/*
+字符串:
+包含符号的有效十进制数字符串 => 带符号的十进制数(忽略前边的0)
+*/
+Number("1") = 1
+Number("123") = 123
+Number("011") = 11
+
+/*
+包含有效的浮点值格式 => 带符号的浮点数数(忽略前边的0)
+*/
+Number("1.1") = 1.1
+Number("-1.1") = -1.1
+Number("00001.1") = 1.1
+
+/*
+包含有效的十六进制格式 => 该十六进制值对应的十进制数值
+*/
+Number("0xf") = 15
+
+/*
+空字符串 => 0
+*/
+Number("") = 0
+
+/*
+对象，调用 valueOf() 方法，并按照上述规则转换返回的
+值。如果转换结果是 NaN ，则调用 toString() 方法，再
+按照转换字符串的规则转换。
+*/
+```
+
+### parseInt()转换规则
+
+```javascript
+/*
+parseInt()更关注字符串是否包含数值模式:
+从第一个非空字符开始，如果不是数值字符或加号减号，立即返回NaN
+直到字符串结束，或碰到非数值字符
+*/
+parseInt("") = NaN
+parseInt("1234blue") = 1234
+parseInt("12.34") //parseInt()只针对整数,小数点不是有效的整数字符
+
+/*
+可以传入第二个参数指定不同进制，识别相对应的正确有效字符
+*/
+parseInt("AF", 16) = 175
+parseInt("AF") = NaN // 默认十进制
+```
+
+### parseFloat()转换规则
+
+```javascript
+/*
+与parseInt()类似，不同的地方：
+1.可以识别一个小数点，从第二个小数点开始视为无效字符
+2.始终忽略开头的零，且只解析十进制
+*/
+parseFloat("1234blue") = 1234
+parseFloat("0xA") = 0
+parseFloat("22.5") = 22.5
+parseFloat("22.5.34") = 22.5
+parseFloat("0908.5") = 908.5
+```
