@@ -1,7 +1,7 @@
-echo "\033[32m 请输入当前分支:"
-read submit 
+br=`git branch | grep "*"`
 git checkout test
 git pull
-git merge $submit
+git merge ${br/* /}
 git commit
 git push
+git checkout ${br/* /}
