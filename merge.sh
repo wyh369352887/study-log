@@ -1,20 +1,19 @@
 name=$1
 br=`git branch | grep "*"`
-branch=('dev')
+array=('dev')
 if [ $name == 'test' ]
 then 
-    branch+=('test')
+    array+=('test')
 elif [ $name == 'pre' ]
 then
-    branch+=('test' 'pre')
+    array+=('test' 'pre')
 elif [ $name == 'master' ]
 then
-    branch+=('test' 'pre' 'master')
+    array+=('test' 'pre' 'master')
 fi
-len=${#branch[@]}
+len=${#array[@]}
 for ((i=0;i<$len;i++));do
-    echo ${branch[$i]}
-    git checkout ${branch[$i]}
+    git checkout ${array[$i]}
     git pull
     git merge ${br/* /}
     git commit

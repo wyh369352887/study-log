@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "merge": "./merge.sh master"
+    "merge": "./merge.sh"
   },
   "repository": {
     "type": "git",
