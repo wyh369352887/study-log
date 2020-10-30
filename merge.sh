@@ -13,14 +13,11 @@ then
 fi
 len=${#branch[@]}
 for ((i=0;i<$len;i++));do
-#  echo ${branch[$i]}
-    echo `切换到${branch[$i]}分支`
-    git checkout 
+    echo ${branch[$i]}
+    git checkout ${branch[$i]}
     git pull
-    echo `开始merge`
     git merge ${br/* /}
     git commit
     git push
-    echo `merge结束`
 done
 git checkout ${br/* /}
