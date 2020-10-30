@@ -1,7 +1,26 @@
+name=$1
 br=`git branch | grep "*"`
-git checkout test
-git pull
-git merge ${br/* /}
-git commit
-git push
+branch=('dev')
+if [ $name == 'test' ]
+then 
+    branch+=('test')
+elif [ $name == 'pre' ]
+then
+    branch+=('test' 'pre')
+elif [ $name == 'master' ]
+then
+    branch+=('test' 'pre' 'master')
+fi
+len=${#branch[@]}
+for ((i=0;i<$len;i++));do
+#  echo ${branch[$i]}
+    echo `切换到${branch[$i]}分支`
+    git checkout 
+    git pull
+    echo `开始merge`
+    git merge ${br/* /}
+    git commit
+    git push
+    echo `merge结束`
+done
 git checkout ${br/* /}
