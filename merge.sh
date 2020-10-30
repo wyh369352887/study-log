@@ -16,7 +16,7 @@ for ((i=0;i<$len;i++));do
     git checkout ${array[$i]}
     git pull
     git merge ${br/* /}
-    if [ $? == 0]
+    if [ $? == 0 ]
     then 
     git commit
     git push
