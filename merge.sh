@@ -16,7 +16,7 @@ then
 fi
 len=${#array[@]}
 for ((i=0;i<$len;i++));do
-    echo -e  "${GREEN_COLOR}======正在merge${${array[$i]}}分支======"
+    echo -e  `${GREEN_COLOR}======正在merge${${array[$i]}}分支======`
     git checkout ${array[$i]}
     git pull
     git merge ${br/* /}
@@ -24,10 +24,10 @@ for ((i=0;i<$len;i++));do
     then 
     git commit
     git push
-    echo -e  "${GREEN_COLOR}======${${array[$i]}}分支merge成功======"
+    echo -e  `${GREEN_COLOR}======${${array[$i]}}分支merge成功======`
     else
-    echo -e  "${RED_COLOR}======请处理冲突后切回原分支重新merge======"
+    echo -e  `${RED_COLOR}======请处理冲突后切回原分支重新merge======`
     fi
 done
 git checkout ${br/* /}
-echo -e  "${YELOW_COLOR}======bash执行结束======"
+echo -e  `${YELOW_COLOR}======bash执行结束======`
