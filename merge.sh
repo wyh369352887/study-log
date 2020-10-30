@@ -22,5 +22,6 @@ for ((i=0;i<$len;i++));do
     git push
     else
     echo `请解决冲突后切回开发分支重新merge`
+    fi
 done
 git checkout ${br/* /}
