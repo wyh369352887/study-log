@@ -1,4 +1,4 @@
-# 在开发分支执行 ./merge.sh ${想同步的最高级分支}
+# 在开发分支执行 ./merge.sh 想同步的最高级分支
 # 分支等级关系 master > pre > test > dev
 # 如有冲突，resolve后一定要切回开发分支重新执行!!!
 name=$1
