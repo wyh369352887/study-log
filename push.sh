@@ -1,4 +1,4 @@
-content=$1
+echo "commit信息：$1";
 git add .
-git commit -m ${content}
+git commit -m $1
 git push
