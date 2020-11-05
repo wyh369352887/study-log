@@ -1,6 +1,6 @@
-# createApp()
+# createApp() mount()
 
-## 从源码分析 crateApp()做了什么
+## 从源码分析 crateApp()和mount()做了什么
 
 #### 主入口
 
@@ -255,8 +255,18 @@ app.mount = (containerOrSelector: Element | string): any => {
   const proxy = mount(container);
   container.removeAttribute("v-cloak");
   container.setAttribute("data-v-app", "");
+
+  // 返回实例，调用app.mount()后可以链式调用其他实例方法
   return proxy;
 };
 ```
 
 至此，`createApp()`方法的逻辑已经梳理完成，此时调用`app.mount()`方法即可将app挂载在DOM元素上。
+
+#### 总结一下createApp()和mount()做的工作：
+
+- 创建Renderer
+- 创建实例
+- 创建VNode
+- 根据不同的平台渲染VNode
+- 将VNode挂载到根元素
