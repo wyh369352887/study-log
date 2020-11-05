@@ -40,6 +40,7 @@ export function createRenderer<
 ```
 
 #### `baseCreateRenderer`方法非常的长，有 1800+行，进行了大量的函数声明，这里对函数体进行了省略。
+
 #### 函数名起的非常语义化，可以清晰得知`baseCreateRenderer`主要是声明了一些`模板编译`和`patch算法`相关的函数。
 
 ```typescript
@@ -192,7 +193,7 @@ const app = {
   mount(rootContainer: HostElement, isHydrate?: boolean): any {
     // isMounted初始化为false
     if (!isMounted) {
-      // 生成虚拟DOM树
+      // 创建VNode
       const vnode = createVNode(rootComponent as ConcreteComponent, rootProps);
 
       // 初始化挂载时将app的上下文环境存储在vnode根节点上
@@ -205,6 +206,7 @@ const app = {
         };
       }
 
+      // 根据不同的运行环境执行不同的渲染VNode流程
       if (isHydrate && hydrate) {
         hydrate(vnode as VNode<Node, Element>, rootContainer as any);
       } else {
@@ -220,6 +222,7 @@ const app = {
         devtoolsInitApp(app, version);
       }
 
+      // 返回根组件实例的一个代理
       return vnode.component!.proxy;
     } else if (__DEV__) {
       warn(
@@ -236,10 +239,14 @@ const app = {
 #### 重写了的`mount()`方法又做了什么？
 
 ```typescript
+// 将原来的mount方法保存下来
+const { mount } = app;
+// web平台重新mount逻辑
 app.mount = (containerOrSelector: Element | string): any => {
   const container = normalizeContainer(containerOrSelector);
   if (!container) return;
   const component = app._component;
+  // render函数和tempalte选项在渲染时的优先级高于挂载元素的InnerHTML
   if (!isFunction(component) && !component.render && !component.template) {
     component.template = container.innerHTML;
   }
@@ -251,3 +258,5 @@ app.mount = (containerOrSelector: Element | string): any => {
   return proxy;
 };
 ```
+
+至此，`createApp()`方法的逻辑已经梳理完成，此时调用`app.mount()`方法即可将app挂载在DOM元素上。
