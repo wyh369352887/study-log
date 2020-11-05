@@ -1,8 +1,8 @@
-### createApp()
+# createApp()
 
-##### 从源码分析 crateApp()做了什么
+## 从源码分析 crateApp()做了什么
 
-主入口
+#### 主入口
 
 ```typescript
 // packages/vue/src/index.ts
@@ -39,8 +39,8 @@ export function createRenderer<
 }
 ```
 
-`baseCreateRenderer`方法非常的长，有 1800+行，进行了大量的函数声明，这里对函数体进行了省略。
-函数名起的非常语义化，可以清晰得知`baseCreateRenderer`主要是声明了一些`模板编译`和`patch算法`相关的函数。
+#### `baseCreateRenderer`方法非常的长，有 1800+行，进行了大量的函数声明，这里对函数体进行了省略。
+#### 函数名起的非常语义化，可以清晰得知`baseCreateRenderer`主要是声明了一些`模板编译`和`patch算法`相关的函数。
 
 ```typescript
 function baseCreateRenderer(
@@ -95,7 +95,7 @@ function baseCreateRenderer(
 }
 ```
 
-这里`createApp`方法是调用`createAppAPI`返回的。
+#### 这里`createApp`方法是调用`createAppAPI`返回的。
 
 ```typescript
 // packages/runtime-core/src/apiCreateApp.ts
@@ -160,7 +160,7 @@ export function createAppAPI<HostElement>(
 }
 ```
 
-再回到`cerateApp()`
+#### 再回到`cerateApp()`
 
 ```typescript
 // packages/runtime-dom/src/index.ts
@@ -185,7 +185,7 @@ export const createApp = ((...args) => {
 }) as CreateAppFunction<Element>;
 ```
 
-创建 app 时的`mount()`方法做了什么？
+#### 创建 app 时的`mount()`方法做了什么？
 
 ```typescript
 const app = {
@@ -233,7 +233,7 @@ const app = {
 };
 ```
 
-重写了的`mount()`方法又做了什么？
+#### 重写了的`mount()`方法又做了什么？
 
 ```typescript
 app.mount = (containerOrSelector: Element | string): any => {
